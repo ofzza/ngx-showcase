@@ -1,0 +1,29 @@
+<h5 *ngIf="title" class="nav-link disabled">{{title}}</h5>
+
+<!-- Component pages tree -->
+<cdk-tree [dataSource]="_treeDataSource" [treeControl]="_tree">
+  <!-- Page group -->
+  <cdk-nested-tree-node
+    *cdkTreeNodeDef="let node; when: _treeHasChildren"
+    class="menu-tree-node menu-tree-node-group"
+    [ngClass]="_tree.isExpanded(node) ? ['menu-tree-node-expanded'] : ['menu-tree-node-collapsed']"
+  >
+    <!-- Link -->
+    <a cdkTreeNodeToggle [class.active]="node.info.active" [routerLink]="node.component ? node.path : null">
+      <span> {{ node.title }} </span>
+    </a>
+
+    <!-- Child links -->
+    <div [class.menu-tree-invisible]="!_tree.isExpanded(node)">
+      <ng-container cdkTreeNodeOutlet></ng-container>
+    </div>
+  </cdk-nested-tree-node>
+
+  <!-- Page link -->
+  <cdk-nested-tree-node *cdkTreeNodeDef="let node" class="menu-tree-node">
+    <!-- Link -->
+    <a [class.active]="node.info.active" [routerLink]="node.fullPath.join('/')">
+      <span> {{ node.title }} </span>
+    </a>
+  </cdk-nested-tree-node>
+</cdk-tree>

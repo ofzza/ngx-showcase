@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+// Bootstrap style imports
+@import '../../../node_modules/bootstrap/scss/bootstrap';
+// Bootstrap theme import
+@import './assets/style/bs5_variables';
+
+// Font
+body {
+  font-family: monospace;
+}

@@ -1,0 +1,32 @@
+:host {
+  display: flex;
+  flex-direction: column;
+
+  header {
+    z-index: 1;
+    height: 56px !important;
+    padding: 8px 16px !important;
+  }
+
+  content {
+    z-index: 0;
+    display: flex;
+    width: 100%;
+    margin-top: 56px;
+
+    nav {
+      padding: 8pt;
+
+      ::ng-deep a {
+        color: white;
+      }
+    }
+
+    main {
+      width: 100%;
+      height: calc(100vh - 56px);
+      padding: 8pt;
+      overflow: auto;
+    }
+  }
+}
