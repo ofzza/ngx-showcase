@@ -1,14 +1,14 @@
-// Frontpage page component
+// Markdown service showcase
 // ----------------------------------------------------------------------------
 
 // Import dependencies
 import { Component } from '@angular/core';
 
 /**
- * Frontpage page component
+ * Markdown pipe showcase
  */
 @Component({
-  templateUrl: 'index.html',
-  styles: ['style.scss'],
+  templateUrl: './index.html',
+  styleUrls: ['./style.scss'],
 })
-export class FrontpageComponent {}
+export class MarkdownServiceShowcase {}

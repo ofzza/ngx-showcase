@@ -1,4 +1,3 @@
-// Aggregates and (re)exports all services
+// Aggregates and (re)exports all components
 // ----------------------------------------------------------------------------
-export * from './routing';
 export * from './syntax';

@@ -43,23 +43,18 @@ export class ShowcaseBasedRouting {
     let relativePath: string, title: string;
     // Extract component path and title
     if (artifactType === ShowcaseArtifactTypes.Component) {
-      relativePath = 'component-demo';
-      title = 'Demo Component';
-    }
-    // Extract directive path and title
-    else if (artifactType === ShowcaseArtifactTypes.Directive) {
-      relativePath = 'directive-demo';
-      title = 'Demo Directive';
+      relativePath = artifact.name.replace(/component/gi, '');
+      title = `<${artifact?.ɵcmp?.selectors?.[0]?.[0] || `${relativePath}`} />`;
     }
     // Extract pipe path and title
     else if (artifactType === ShowcaseArtifactTypes.Pipe) {
-      relativePath = 'pipe-demo';
-      title = 'Demo Pipe';
+      relativePath = artifact.name.toLowerCase().replace(/pipe/gi, '');
+      title = `| ${artifact?.ɵpipe?.name || artifact.name.replace(/pipe/gi, '')}`;
     }
-    // Extract pipe path and title
-    else if (artifactType === ShowcaseArtifactTypes.Injectable) {
-      relativePath = 'injectable-demo';
-      title = 'Demo Injectable';
+    // Extract service path and title
+    else if (artifactType === ShowcaseArtifactTypes.Service) {
+      relativePath = artifact.name.toLowerCase().replace(/service/gi, '');
+      title = `${artifact.name.replace(/pipe/gi, '')}`;
     }
     // Artifact type not supported
     else {

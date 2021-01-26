@@ -4,9 +4,19 @@
 // Import dependencies
 import { NgModule } from '@angular/core';
 
-// Import and (re)export dependency modules
-export * from './app';
-import { ShowcaseAppModule } from './app';
+// Import child components
+import { SyntaxAreaComponent, SyntaxAreaComponentShowcase } from './components';
+const components = [SyntaxAreaComponent, SyntaxAreaComponentShowcase];
+
+// Import pipes
+import { ExtractInnerSyntaxPipe } from './pipes';
+import { MarkdownPipe } from './pipes';
+const pipes = [ExtractInnerSyntaxPipe, MarkdownPipe];
+
+// Import injectables
+import { MarkdownService } from './services';
+import { HighlightService } from './services';
+const injectables = [MarkdownService, HighlightService];
 
 // (Re)export services
 export * from './services';
@@ -15,8 +25,9 @@ export * from './services';
  * Main ngx-showcase library module
  */
 @NgModule({
-  declarations: [],
-  imports: [ShowcaseAppModule],
-  exports: [ShowcaseAppModule],
+  declarations: [...components, ...pipes],
+  providers: [...injectables],
+  imports: [],
+  exports: [...components, ...pipes],
 })
 export class ShowcaseModule {}

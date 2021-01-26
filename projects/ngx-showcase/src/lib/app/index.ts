@@ -10,6 +10,9 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 // (Re)export routes
 export * from './routes';
 
+// Import main showcase library module as dependency
+import { ShowcaseModule } from '../ngx-showcase.module';
+
 // Import components
 import { AppMenuComponent } from './components';
 
@@ -18,7 +21,7 @@ import { AppMenuComponent } from './components';
  */
 @NgModule({
   declarations: [AppMenuComponent],
-  imports: [CommonModule, RouterModule, CdkTreeModule],
-  exports: [AppMenuComponent],
+  imports: [CommonModule, RouterModule, CdkTreeModule, ShowcaseModule],
+  exports: [AppMenuComponent, ShowcaseModule],
 })
 export class ShowcaseAppModule {}
