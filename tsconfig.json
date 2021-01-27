@@ -12,20 +12,14 @@
     "declaration": false,
     "downlevelIteration": true,
     "paths": {
-      "ngx-showcase": [
-        "dist/ngx-showcase/ngx-showcase",
-        "dist/ngx-showcase"
-      ]
+      "ngx-showcase": ["dist/ngx-showcase/ngx-showcase", "dist/ngx-showcase"]
     },
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ]
+    "lib": ["es2019", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

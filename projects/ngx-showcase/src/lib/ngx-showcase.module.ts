@@ -3,6 +3,7 @@
 
 // Import dependencies
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 // Import child components
 import { SyntaxAreaComponent, SyntaxAreaComponentShowcase } from './components';
@@ -27,7 +28,7 @@ export * from './services';
 @NgModule({
   declarations: [...components, ...pipes],
   providers: [...injectables],
-  imports: [],
-  exports: [...components, ...pipes],
+  imports: [CommonModule],
+  exports: [CommonModule, ...components, ...pipes],
 })
 export class ShowcaseModule {}

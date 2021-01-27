@@ -1,1 +1,30 @@
-<div [innerHTML]="syntax"></div>
+<!-- Component container -->
+<div class="ngx-syntaxarea-container">
+  <!-- Line numbers for not-wrapped content (Injected as a separate, manged panel, to avoid horizontal scrolling with content when content is not wrapped) -->
+  <div *ngIf="numbers && !wrap" #numbers class="line-numbers">
+    <!-- Expansion holder - makes sure largest of line-numbers will fit without resizing -->
+    <div class="line-numbers-expand" #numbersExpansion style="opacity: 0; color: transparent; pointer-events: none"></div>
+    <!-- Line numbers -->
+    <div class="line-numbers-content" #numbersView [innerHTML]="_numbers.join('\n')"></div>
+  </div>
+
+  <!-- Syntax area -->
+  <div #syntaxarea class="syntaxarea" [class.wrap]="wrap">
+    <!-- Expansion holder - ensures container provides scrolling -->
+    <div #syntaxareaExpansion style="opacity: 0; color: transparent; pointer-events: none" class="syntaxarea-expand"></div>
+    <!-- Syntax lines (Manual padding for line-numbers when line-number are being shown) -->
+    <div #syntaxareaView class="syntaxarea-view" [ngStyle]="{ paddingLeft: (numbers && wrap ? _linesNumberOffset : 0) + 'px' }" [innerHTML]="_content">
+      <!-- Syntax line -->
+      <!-- Injected directly for performance reasons -->
+      <!--<div *ngFor="let line of _lines" class="syntax-line">-->
+      <!-- Line-number for wrapped content (Injected directly into a line with absolute offset, positioning onto start of every wrapped line) -->
+      <!-- <span *ngIf="numbers && wrap" class="syntax-line-index" [ngStyle]="{ left: (-1 * _linesNumberOffset) + 'px' }">{{ line.index }}</span> -->
+      <!-- Syntax line content -->
+      <!-- <span class="syntax-line-content">{{ line.content }}</span> -->
+      <!--</div>-->
+    </div>
+  </div>
+</div>
+
+<!-- Character detection host -->
+<div style="display: none; opacity: 0; color: transparent; pointer-events: none" #char></div>

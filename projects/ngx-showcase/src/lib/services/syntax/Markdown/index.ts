@@ -13,6 +13,10 @@ export * from './_showcase';
  * MarkdownIt options type
  */
 export type TMarkdownOptions = {
+  // If syntax should be trimmed before processing
+  // ... trimming will remove whitespace and the start and end of syntax
+  // ... trimming will remove minimum common indentation whitespace from all lines
+  trim?: boolean;
   // Convert line-breaks into <br /> elements
   breaks?: boolean;
   // Convert URLs to links
@@ -29,12 +33,13 @@ export class MarkdownService {
   /**
    * MarkdownIt instance
    */
-  private static _md?: any;
+  private static _markdownit?: any;
 
   /**
    * Default MarkdownIt options
    */
   public static defaultOptions: TMarkdownOptions = {
+    trim: true,
     breaks: true,
     linkify: false,
     quotes: undefined,
@@ -42,8 +47,8 @@ export class MarkdownService {
 
   constructor(protected _highlight: HighlightService) {
     // Instantiate MarkdownIt if not already instantiated
-    if (!MarkdownService._md) {
-      MarkdownService._md = new MarkdownIt();
+    if (!MarkdownService._markdownit) {
+      MarkdownService._markdownit = new MarkdownIt();
     }
   }
 
@@ -53,7 +58,7 @@ export class MarkdownService {
    */
   public render(syntax: string, options?: TMarkdownOptions) {
     // Set options
-    MarkdownService._md.set({
+    const margedOptions = {
       // Non exposed options
       ...{
         highlight: this._highlight.render,
@@ -62,8 +67,25 @@ export class MarkdownService {
       ...options,
       // Default options
       ...MarkdownService.defaultOptions,
-    });
+    };
+    MarkdownService._markdownit.set(margedOptions);
+    // Trim
+    if (margedOptions.trim) {
+      const lines = syntax.replace(/\t/g, '  ').split('\n');
+      const indentationDepth = lines.reduce((min, line) => {
+        // Test min indentation against a proper line
+        if (line && line.trim()) {
+          const indentation = line.length - line.trimStart().length;
+          return indentation < min ? indentation : min;
+        }
+        // ... or keepo current indentation for inproper lines
+        else {
+          return min;
+        }
+      }, Number.MAX_SAFE_INTEGER);
+      syntax = lines.map(line => line.substr(indentationDepth)).join('\n');
+    }
     // Render
-    return MarkdownService._md.render(syntax);
+    return MarkdownService._markdownit.render(syntax);
   }
 }

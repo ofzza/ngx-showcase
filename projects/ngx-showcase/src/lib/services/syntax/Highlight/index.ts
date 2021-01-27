@@ -2,7 +2,7 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
-import * as HighlightJs from 'highlight.js';
+import * as highlightjs from 'highlight.js';
 import { Injectable } from '@angular/core';
 
 // (Re)export showcase component
@@ -21,11 +21,11 @@ export class HighlightService {
   public registerLanguage(key: string | string[], language: any) {
     // Register language under multiple keys
     if (key instanceof Array) {
-      key.forEach(k => HighlightJs.registerLanguage(k, language));
+      key.forEach(k => highlightjs.registerLanguage(k, language));
     }
     // Register language
     else {
-      HighlightJs.registerLanguage(key, language);
+      highlightjs.registerLanguage(key, language);
     }
   }
 
@@ -37,12 +37,12 @@ export class HighlightService {
   public render(syntax: string, language?: string): string {
     // Convert into explicitly specified language
     if (language) {
-      return HighlightJs.highlight(language, syntax).value;
+      return highlightjs.highlight(language, syntax).value;
     }
 
     // Auto detect target language
     else {
-      return HighlightJs.highlightAuto(syntax).value;
+      return highlightjs.highlightAuto(syntax).value;
     }
   }
 }

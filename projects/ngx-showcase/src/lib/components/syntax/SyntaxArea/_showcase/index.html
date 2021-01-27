@@ -1,17 +1,31 @@
-<ngx-syntaxarea [syntax]="syntax | inner | markdown"></ngx-syntaxarea>
-<textarea style="display: none" #syntax>
-  ### Heading
-  
-  - This
-  - is
-  - a
-  - list
+<div class="showcase">
+  <!-- Description -->
+  <div class="description" [innerHTML]="description | inner | markdown"></div>
+  <textarea style="display: none" #description>
+    ### Heading
+    
+    - This
+    - is
+    - a
+    - list
 
-  http://www.google.com is where [Google](https://www.google.com) is located!
+    http://www.google.com is where [Google](https://www.google.com) is located!
 
-  > This is a comment
+    > This is a comment
 
-  ```js
-  const syntax = '... and this is some JS code!';
-  ```
-</textarea>
+    ```js
+    const syntax = '... and this is some JS code!';
+    ```
+  </textarea>
+  <hr />
+
+  <!-- Example code -->
+  <div class="syntax-container">
+    <div class="syntax">
+      <ngx-syntaxarea [syntax]="data.syntax" [wrap]="false" [numbers]="true"></ngx-syntaxarea>
+    </div>
+    <div class="syntax">
+      <ngx-syntaxarea [syntax]="data.syntax" [wrap]="true" [numbers]="true"></ngx-syntaxarea>
+    </div>
+  </div>
+</div>
