@@ -4,15 +4,6 @@
 // Import dependencies
 import { Component } from '@angular/core';
 
-// Ready large amount of text
-const data = {
-  syntax: Array.from({ length: 100_000 }, (_, i) => {
-    const lorem =
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-    return (i + 1).toString() + ' -> ' + lorem.substr(0, Math.ceil((0.2 + 0.8 * Math.random()) * lorem.length)) + '|';
-  }).join('\n'),
-};
-
 /**
  * Syntax area component showcase
  */
@@ -21,7 +12,20 @@ const data = {
   styleUrls: ['./style.scss'],
 })
 export class SyntaxAreaComponentShowcase {
-  public get data() {
-    return data;
+  private _n = 1;
+  private _str?: string;
+  public _count = 1;
+  private _multiplied?: string;
+  public _view = 1;
+  public setCount(e: Event) {
+    this._count = parseInt((e.target as HTMLInputElement).value, 10) || 0;
+  }
+  public _multiply(str: null | string, n: number): string {
+    if (!str) return '';
+    if (this._n === n && this._str === str && this._multiplied) {
+      return this._multiplied as string;
+    } else {
+      return (this._multiplied = Array.from({ length: (this._n = n) + 1 }, _ => '').join((this._str = str))) as string;
+    }
   }
 }

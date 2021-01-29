@@ -2,10 +2,10 @@
 // Defines application routes and registers them with the app
 // ----------------------------------------------------------------------------
 
-// Import dependencies
+// Import modules
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ShowcaseModule, ShowcaseBasedRouting } from '../../../ngx-showcase/src/public-api';
+import { ShowcaseAppModule, ShowcaseBasedRouting } from '../../../ngx-showcase/src/public-api';
 
 // Import pages/routes
 import { FrontpageComponent } from './pages';
@@ -26,7 +26,8 @@ const routes: Routes = [
  * Defines application routes and registers them with the app
  */
 @NgModule({
-  imports: [RouterModule.forRoot(routes), ShowcaseModule],
-  exports: [RouterModule],
+  declarations: [],
+  imports: [RouterModule.forRoot(routes), ShowcaseAppModule],
+  exports: [RouterModule, ShowcaseAppModule],
 })
 export class AppRoutingModule {}

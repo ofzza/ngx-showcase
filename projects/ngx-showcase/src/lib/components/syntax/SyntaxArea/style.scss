@@ -21,6 +21,8 @@
       top: 0;
       bottom: 0;
       overflow-y: hidden;
+      user-select: none;
+      background-color: inherit;
     }
   }
 
@@ -56,20 +58,34 @@
       min-height: 100%;
       padding-left: 0px;
 
-      .syntax-line {
-        position: relative;
-        overflow: visible;
-        padding-left: 4pt;
-        .syntax-line-index {
-          position: absolute;
-          left: -0px;
+      ::ng-deep {
+        .syntax-line {
+          position: relative;
+          overflow: visible;
+          .syntax-line-index {
+            position: absolute;
+            left: -0px;
+            background-color: inherit;
+            user-select: none;
+          }
         }
       }
     }
 
     // Wrapping
+    &.wrap {
+      .syntaxarea-view ::ng-deep .syntax-line .syntax-line-content {
+        white-space: pre-wrap;
+      }
+    }
     &:not(.wrap) {
       white-space: nowrap;
+      .syntaxarea-expand {
+        white-space: pre;
+      }
+      .syntaxarea-view ::ng-deep .syntax-line .syntax-line-content {
+        white-space: pre;
+      }
     }
   }
 }

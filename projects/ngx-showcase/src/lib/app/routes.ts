@@ -9,6 +9,7 @@ import { SyntaxAreaComponent, SyntaxAreaComponentShowcase } from '../components'
 
 // Import pipes
 import { ExtractInnerSyntaxPipe, ExtractInnerSyntaxPipeShowcase } from '../pipes';
+import { FetchPipe, FetchPipeShowcase } from '../pipes';
 import { MarkdownPipe, MarkdownPipeShowcase } from '../pipes';
 import { HighlightPipe, HighlightPipeShowcase } from '../pipes';
 
@@ -34,6 +35,8 @@ export const routes = [
     new Route('Syntax processing', 'syntax', undefined, {}, undefined, [
       // Extract inner syntax pipe
       ShowcaseBasedRouting.createRouteFromArtifact(ExtractInnerSyntaxPipe, ShowcaseArtifactTypes.Pipe, ExtractInnerSyntaxPipeShowcase),
+      // Fetch resource pipe
+      ShowcaseBasedRouting.createRouteFromArtifact(FetchPipe, ShowcaseArtifactTypes.Pipe, FetchPipeShowcase),
       // Markdown pipe
       ShowcaseBasedRouting.createRouteFromArtifact(MarkdownPipe, ShowcaseArtifactTypes.Pipe, MarkdownPipeShowcase),
       // Highlight pipe

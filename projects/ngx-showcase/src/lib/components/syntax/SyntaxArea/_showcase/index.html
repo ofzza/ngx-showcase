@@ -1,31 +1,65 @@
 <div class="showcase">
-  <!-- Description -->
-  <div class="description" [innerHTML]="description | inner | markdown"></div>
-  <textarea style="display: none" #description>
-    ### Heading
-    
-    - This
-    - is
-    - a
-    - list
+  <div>
+    <!-- TODO: ... -->
+    Exposes classes: .ngx-syntaxarea, .ngx-syntaxarea-linenums, .ngx-syntaxarea-syntax
 
-    http://www.google.com is where [Google](https://www.google.com) is located!
+    <!-- Description -->
+    <div class="description" [innerHTML]="'docs/example.md' | fetchAsync:'fetching ...' | async | markdownAsync:{}:'parsing ...' | async"></div>
+  </div>
 
-    > This is a comment
+  <!-- Display select -->
+  <div>
+    <button [class.selected]="_view === 1" (click)="_view = 1">Textarea</button>
+    <button [class.selected]="_view === 2" (click)="_view = 2">Plain div</button>
+    <button [class.selected]="_view === 3" (click)="_view = 3">Syntaxarea</button>
+    <button [class.selected]="_view === 4" (click)="_view = 4">Syntaxarea (wrapped)</button>
 
-    ```js
-    const syntax = '... and this is some JS code!';
-    ```
-  </textarea>
-  <hr />
+    :::
+
+    <input type="number" min="1" max="1000" [step]="1" [value]="_count" (input)="setCount($event)" />
+
+    :::
+
+    <div class="animation-container">
+      <div class="animation"></div>
+    </div>
+  </div>
 
   <!-- Example code -->
   <div class="syntax-container">
-    <div class="syntax">
-      <ngx-syntaxarea [syntax]="data.syntax" [wrap]="false" [numbers]="true"></ngx-syntaxarea>
-    </div>
-    <div class="syntax">
-      <ngx-syntaxarea [syntax]="data.syntax" [wrap]="true" [numbers]="true"></ngx-syntaxarea>
-    </div>
+    <ng-container *ngIf="_view === 1">
+      <div class="syntax">
+        <textarea [value]="_multiply(('docs/syntax.js' | fetchAsync:'fetching ...' | async), _count)"></textarea>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="_view === 2">
+      <div class="syntax">
+        <pre>
+          <code [innerHTML]="_multiply(('docs/syntax.js' | fetchAsync:'fetching ...' | async), _count) | highlightAsync:'js':'highlighting ...' | async">
+          </code>
+        </pre>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="_view === 3">
+      <div class="syntax">
+        <ngx-syntaxarea
+          [syntax]="(_multiply(('docs/syntax.js' | fetchAsync:'fetching ...' | async), _count) | highlightAsync:'js':'highlighting ...' | async)"
+          [wrap]="false"
+          [numbers]="true"
+        ></ngx-syntaxarea>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="_view === 4">
+      <div class="syntax">
+        <ngx-syntaxarea
+          [syntax]="(_multiply(('docs/syntax.js' | fetchAsync:'fetching ...' | async), _count) | highlightAsync:'js':'highlighting ...' | async)"
+          [wrap]="true"
+          [numbers]="true"
+        ></ngx-syntaxarea>
+      </div>
+    </ng-container>
   </div>
 </div>

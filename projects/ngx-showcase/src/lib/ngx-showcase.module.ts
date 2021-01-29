@@ -1,26 +1,30 @@
 // Main ngx-showcase library module
 // ----------------------------------------------------------------------------
 
-// Import dependencies
+// Import modules
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+const modules = [CommonModule, HttpClientModule];
 
-// Import child components
+// Import and (re)export child components
+export * from './components';
 import { SyntaxAreaComponent, SyntaxAreaComponentShowcase } from './components';
 const components = [SyntaxAreaComponent, SyntaxAreaComponentShowcase];
 
-// Import pipes
+// Import and (re)export pipes
+export * from './pipes';
 import { ExtractInnerSyntaxPipe } from './pipes';
-import { MarkdownPipe } from './pipes';
-const pipes = [ExtractInnerSyntaxPipe, MarkdownPipe];
+import { FetchPipe } from './pipes';
+import { MarkdownPipe, MarkdownAsyncPipe } from './pipes';
+import { HighlightPipe, HighlightAsyncPipe } from './pipes';
+const pipes = [ExtractInnerSyntaxPipe, FetchPipe, HighlightPipe, HighlightAsyncPipe, MarkdownPipe, MarkdownAsyncPipe];
 
-// Import injectables
+// Import and (re)export injectables
+export * from './services';
 import { MarkdownService } from './services';
 import { HighlightService } from './services';
 const injectables = [MarkdownService, HighlightService];
-
-// (Re)export services
-export * from './services';
 
 /**
  * Main ngx-showcase library module
@@ -28,7 +32,7 @@ export * from './services';
 @NgModule({
   declarations: [...components, ...pipes],
   providers: [...injectables],
-  imports: [CommonModule],
-  exports: [CommonModule, ...components, ...pipes],
+  imports: [...modules],
+  exports: [...modules, ...components, ...pipes],
 })
 export class ShowcaseModule {}

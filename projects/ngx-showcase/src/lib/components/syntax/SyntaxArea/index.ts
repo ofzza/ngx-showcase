@@ -2,7 +2,7 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
-import { Component, ViewEncapsulation, OnChanges, AfterViewInit, OnDestroy, ViewChild, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, AfterViewInit, OnDestroy, ViewChild, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 // (Re)export showcase component
@@ -15,14 +15,13 @@ export * from './_showcase';
   selector: 'ngx-syntaxarea',
   templateUrl: './index.html',
   styleUrls: ['./style.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy {
   /**
    * Syntax to display
    */
   @Input()
-  public syntax?: string;
+  public syntax?: string | null;
 
   /**
    * If displayed syntax should be wrapped
@@ -91,11 +90,7 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
   /**
    * Processed syntax
    */
-  private _syntaxProcessed: { index?: number; content: string }[] = [];
-  /**
-   * Processed syntax cols count (counting non-wrapped content as same row cols)
-   */
-  private _syntaxProcessedColsCount = 0;
+  private _syntaxProcessed: { index?: number; text?: string; content: string }[] = [];
   /**
    * Processed syntax rows count (counting wrapped content as multiple rows)
    */
@@ -126,35 +121,32 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
    */
   private _syntaxareaRowsCount = 0;
 
-  /**
-   * Calculated offset required to fit largest line-number
-   */
-  public get _linesNumberOffset(): number {
-    return this.numbers ? Math.floor(Math.log10(this._syntaxProcessedLinesCount) + 1) * this._charWidth : 0;
-  }
-
   constructor(private _cd: ChangeDetectorRef, private _sanitizer: DomSanitizer) {}
 
-  public ngOnChanges() {
+  public ngOnChanges(changes: SimpleChanges) {
     // (Re)Process syntax
     if (this._syntaxareaColsCount && this._syntaxareaRowsCount) {
-      this._detectDimensions();
-      this._processSyntax();
+      if (this._detectDimensions() || changes.syntax) {
+        this._processSyntax(changes.syntax.previousValue);
+        this._resizeView();
+        this._updateView();
+      }
     }
   }
 
   public ngAfterViewInit() {
     if (this._syntaxareaEl) {
       // Detect syntaxarea dimensions
-      this._detectDimensions();
-      this._processSyntax();
-      this._resizeView();
+      if (this._detectDimensions()) {
+        this._processSyntax();
+        this._resizeView();
+      }
       // Track syntaxarea for resize events
       // @ts-ignore
       this._resizeObserver = new ResizeObserver(_ => {
-        this._detectDimensions();
-        this._processSyntax();
-        this._resizeView();
+        if (this._detectDimensions()) {
+          this._resizeView();
+        }
       });
       this._resizeObserver.observe(this._syntaxareaEl.nativeElement);
       // Track syntaxarea scroll events
@@ -178,9 +170,9 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
   }
 
   /**
-   * Detect line lengths and count of text-area
+   * Detect line lengths and count of output area
    */
-  private _detectDimensions() {
+  private _detectDimensions(): boolean {
     // Check syntaxarea element
     if (!this._syntaxareaEl) {
       throw new Error('Syntaxarea syntax host element not found!');
@@ -206,14 +198,21 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
     this._charEl.nativeElement.style.display = display;
 
     // Calculate syntaxarea line length and lines count
-    this._syntaxareaColsCount = Math.floor(this._syntaxareaViewEl.nativeElement.clientWidth / this._charWidth);
-    this._syntaxareaRowsCount = Math.floor(this._syntaxareaViewEl.nativeElement.clientHeight / this._charHeight);
+    const colsCount = Math.floor(this._syntaxareaViewEl.nativeElement.clientWidth / this._charWidth),
+      rowsCount = Math.floor(this._syntaxareaViewEl.nativeElement.clientHeight / this._charHeight),
+      changeDetected = this._syntaxareaColsCount !== colsCount || this._syntaxareaRowsCount !== rowsCount;
+    this._syntaxareaColsCount = colsCount;
+    this._syntaxareaRowsCount = rowsCount;
+
+    // Return change detection
+    return changeDetected;
   }
 
   /**
-   * Process syntax to detect line count and wrapped lines
+   * Parse syntax into displayable, indexed lines
+   * @param previousSyntaxValue Previous value of syntax (attempts to reuse previously processed syntax)
    */
-  private _processSyntax() {
+  private _processSyntax(previousSyntaxValue?: string) {
     // Check if syntax
     if (!this.syntax) {
       // Set empty processed syntax
@@ -221,53 +220,52 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
       return;
     }
 
+    // Initialize an element to use to strip away HTML syntax when determining line length
+    const htmlStrippingEl = document.createElement('div');
+
+    // Initialize syntax for processing
+    let lines: string[];
+    // If previously processed syntax is start of current syntax, reuse processed info
+    if (previousSyntaxValue && previousSyntaxValue.length < this.syntax.length && this.syntax.startsWith(previousSyntaxValue)) {
+      lines = this.syntax.substr(previousSyntaxValue.length).split('\n');
+      this._syntaxProcessedLinesCount += lines.length;
+    }
+    // If previously processed syntax is not start of current syntax, reset processed info
+    else {
+      this._syntaxProcessed = [];
+      lines = this.syntax.split('\n');
+      this._syntaxProcessedLongestLine = '';
+      this._syntaxProcessedLinesCount = lines.length;
+    }
+
     // Process syntax
-    const lines = this.syntax?.split('\n');
-    this._syntaxProcessedColsCount = this.wrap ? this._syntaxareaColsCount : 0;
-    this._syntaxProcessedRowsCount = 0;
-    this._syntaxProcessedLongestLine = this.wrap ? Array.from({ length: this._syntaxareaColsCount }, _ => ' ').join() : '';
-    this._syntaxProcessedLinesCount = lines.length;
-    this._syntaxProcessed = [];
-    lines.forEach((line, i) => {
-      // Process not-wrapped row
+    lines.forEach(line => {
+      // If not wrapped, find longest line
       if (!this.wrap) {
-        // Get columns count
-        this._syntaxProcessedColsCount = line.length > this._syntaxProcessedColsCount ? line.length : this._syntaxProcessedColsCount;
-        // Get rows count
-        this._syntaxProcessedRowsCount += 1;
+        // Get stripped line
+        htmlStrippingEl.innerHTML = line;
+        const strippedLine = htmlStrippingEl.innerText;
         // Get longest line
-        this._syntaxProcessedLongestLine = line.length > this._syntaxProcessedLongestLine.length ? line : this._syntaxProcessedLongestLine;
-        // Return processed line
-        this._syntaxProcessed.push({
-          index: i + 1,
-          content: line,
-        });
+        this._syntaxProcessedLongestLine = strippedLine.length > this._syntaxProcessedLongestLine.length ? strippedLine : this._syntaxProcessedLongestLine;
       }
 
-      // Process wrapped row
-      else {
-        // Get rows count
-        const rowsCount = Math.ceil(line.length / this._syntaxareaColsCount);
-        this._syntaxProcessedRowsCount += rowsCount;
-        // Return processed line
-        this._syntaxProcessed.push(
-          // ... content
-          {
-            index: i + 1,
-            content: line,
-          },
-          // ... additional empty lines to keep array indices predictable
-          ...(rowsCount > 1 ? Array.from({ length: rowsCount - 1 }, _ => ({ content: '' })) : []),
-        );
-      }
+      // Store processed line
+      this._syntaxProcessed.push({
+        index: this._syntaxProcessed.length + 1,
+        content: line,
+      });
     });
   }
 
   /**
-   * Applies view changes due to syntaxarea resizing of properties changes
+   * Resizes elements of the component to refit them to bew dimensions
    */
   private _resizeView() {
     // Check syntaxarea element
+    if (!this._syntaxareaEl) {
+      throw new Error('Syntaxarea syntax host element not found!');
+    }
+    // Check syntaxarea view element
     if (!this._syntaxareaViewEl) {
       throw new Error('Syntaxarea syntax view host element not found!');
     }
@@ -278,23 +276,29 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
 
     // Update max numbers
     if (this._numbersExpansionEl) {
-      this._numbersExpansionEl.nativeElement.innerHTML = this._syntaxProcessedLinesCount.toString();
+      this._numbersExpansionEl.nativeElement.innerHTML = `${this._syntaxProcessedLinesCount.toString()}&nbsp;`;
     }
 
     // Expand syntaxarea to make scrollbars match content
     this._syntaxareaExpansionEl.nativeElement.innerHTML = `_${this._syntaxProcessedLongestLine}_`;
-    const expandedHeight = this._syntaxProcessedRowsCount * this._charHeight;
+    const expandedHeight = this._syntaxProcessedLinesCount * this._charHeight;
     this._syntaxareaExpansionEl.nativeElement.style.height = `${expandedHeight}px`;
     if (expandedHeight > 33554400) {
       console.warn(`Syntax editor inner height calculated as ${expandedHeight}, while browser only allows maximum height of 33554400!`);
     }
+    this._syntaxareaEl.nativeElement.scrollTop =
+      expandedHeight < this._syntaxareaEl.nativeElement.scrollHeight
+        ? 0
+        : expandedHeight < this._syntaxareaEl.nativeElement.scrollTop
+        ? expandedHeight
+        : this._syntaxareaEl.nativeElement.scrollTop;
 
     // Update view
     this._updateView();
   }
 
   /**
-   * Applies view changes due to syntaxarea resizing of properties changes
+   * Updates component view with currently visible syntax
    */
   private _updateView() {
     // Check syntaxarea element
@@ -309,16 +313,35 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
     // Detect scroll offsets
     const offsetCharsTop = Math.floor(this._syntaxareaEl.nativeElement.scrollTop / this._charHeight);
 
+    // Calculate numbers column chars count
+    const numbersMaxCharCount = Math.floor(Math.log10(this._syntaxProcessedLinesCount) + 2);
+
+    // Update line-numbers (based on scroll position)
+    this._numbers = [];
+    for (let i = 0; i < this._syntaxareaRowsCount; i++) {
+      if (this._syntaxProcessed.length > offsetCharsTop + i) {
+        const num = this._syntaxProcessed[offsetCharsTop + i]?.index?.toString();
+        this._numbers.push((num || '').padEnd(numbersMaxCharCount, ' ').replace(/ /g, '&nbsp;'));
+      }
+    }
+
     // Update view (based on scroll position)
     const lines: string[] = [];
-    const lineOffset = this._linesNumberOffset;
+    const lineOffset = this.numbers && this.wrap ? numbersMaxCharCount * this._charWidth : 0;
     for (let i = 0; i < this._syntaxareaRowsCount; i++) {
       if (this._syntaxProcessed.length > offsetCharsTop + i) {
         const line = this._syntaxProcessed[offsetCharsTop + i];
-        if (line?.index) {
+        if (line.index) {
           lines.push(`
-            <div class="syntax-line">
-              ${this.numbers && this.wrap ? `<span class="syntax-line-index" style="left: ${-1 * lineOffset}px">${line.index}</span>` : ''}
+            <div class="syntax-line" style="min-width: 1px; min-height: ${this._charHeight}px">
+              ${
+                this.numbers && this.wrap
+                  ? `<span class="syntax-line-index ngx-syntaxarea-linenums" style="left: ${-1 * lineOffset}px">${line.index
+                      .toString()
+                      .padEnd(numbersMaxCharCount, ' ')
+                      .replace(/ /g, '&nbsp;')}</span>`
+                  : ''
+              }
               <span class="syntax-line-content">${line.content}</span>
             </div>
           `);
@@ -326,19 +349,11 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
       }
     }
     this._content = this._sanitizer.bypassSecurityTrustHtml(lines.join('\n'));
+    this._syntaxareaViewEl.nativeElement.style.paddingLeft = `${lineOffset}px`;
 
     // Translate view to account for scrolled offset
     const scrollTop = this._syntaxareaEl.nativeElement.scrollTop;
     this._syntaxareaViewEl.nativeElement.style.transform = `translateY(${scrollTop}px)`;
-
-    // Update line-numbers (based on scroll position)
-    this._numbers = [];
-    for (let i = 0; i < this._syntaxareaRowsCount; i++) {
-      if (this._syntaxProcessed.length > offsetCharsTop + i) {
-        const num = this._syntaxProcessed[offsetCharsTop + i]?.index?.toString();
-        this._numbers.push(num || '');
-      }
-    }
 
     // Trigger change detection
     this._cd.detectChanges();

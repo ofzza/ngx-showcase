@@ -2,10 +2,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/app",
+    "outDir": "../../out-tsc/worker",
+    "lib": ["es2019"],
     "types": []
   },
-  "files": ["src/main.ts", "src/polyfills.ts"],
-  "include": ["src/**/*.d.ts"],
-  "exclude": ["**/*.worker.ts"]
+  "include": ["../../node_modules/highlight.js/types/*.d.ts", "src/**/*.worker.ts"]
 }

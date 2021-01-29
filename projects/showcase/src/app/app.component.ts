@@ -3,11 +3,24 @@
 
 // Import dependencies
 import { Component } from '@angular/core';
-import { routes, HighlightService } from '../../../ngx-showcase/src/public-api';
+import { routes, MarkdownService, HighlightService } from '../../../ngx-showcase/src/public-api';
 
 // Import highlight.js languages
 import * as xml from 'highlight.js/lib/languages/xml';
 import * as javascript from 'highlight.js/lib/languages/javascript';
+
+// Register markdown web-worker
+MarkdownService.registerWorker(() => {
+  return new Worker('../workers/markdown.worker', {
+    type: 'module',
+  });
+});
+// Register highlighting web-worker
+HighlightService.registerWorker(() => {
+  return new Worker('../workers/highlight.worker', {
+    type: 'module',
+  });
+});
 
 /**
  * Showcase application main component
@@ -23,7 +36,7 @@ export class AppComponent {
    */
   public _routes = routes;
 
-  constructor(highlight: HighlightService) {
+  constructor(markdown: MarkdownService, highlight: HighlightService) {
     // Register highlighting languages
     highlight.registerLanguage('xml', xml);
     highlight.registerLanguage(['js', 'javascript'], javascript);

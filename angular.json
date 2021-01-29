@@ -32,13 +32,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/ngx-showcase/tsconfig.lib.json",
-              "projects/ngx-showcase/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["projects/ngx-showcase/tsconfig.lib.json", "projects/ngx-showcase/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -65,12 +60,31 @@
             "aot": true,
             "assets": [
               "projects/showcase/src/favicon.ico",
-              "projects/showcase/src/assets"
+              "projects/showcase/src/assets",
+              {
+                "glob": "package.json",
+                "input": ".",
+                "output": "/"
+              },
+              {
+                "glob": "LICENSE",
+                "input": ".",
+                "output": "/"
+              },
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "/"
+              },
+              {
+                "glob": "*",
+                "input": "./docs",
+                "output": "/docs"
+              }
             ],
-            "styles": [
-              "projects/showcase/src/styles.scss"
-            ],
-            "scripts": []
+            "styles": ["projects/showcase/src/styles.scss"],
+            "scripts": [],
+            "webWorkerTsConfig": "projects/showcase/tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -126,13 +140,8 @@
             "polyfills": "projects/showcase/src/polyfills.ts",
             "tsConfig": "projects/showcase/tsconfig.spec.json",
             "karmaConfig": "projects/showcase/karma.conf.js",
-            "assets": [
-              "projects/showcase/src/favicon.ico",
-              "projects/showcase/src/assets"
-            ],
-            "styles": [
-              "projects/showcase/src/styles.scss"
-            ],
+            "assets": ["projects/showcase/src/favicon.ico", "projects/showcase/src/assets"],
+            "styles": ["projects/showcase/src/styles.scss"],
             "scripts": []
           }
         },
@@ -141,12 +150,11 @@
           "options": {
             "tsConfig": [
               "projects/showcase/tsconfig.app.json",
+              "projects/showcase/tsconfig.worker.json",
               "projects/showcase/tsconfig.spec.json",
               "projects/showcase/e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
