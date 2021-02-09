@@ -1,5 +1,7 @@
-- [x] Drop code duplication between worker and non-worker usage of libraries
-- [x] HighlightAsync pipe, make sure it can unsubscribe - use .pipe instead of a subscribed subject
-- [x] SyntaxArea syntax processing - only process up to the line being viewed, process more when needed
-- [x] Load async resource pipe: fetchAsync
-- [x] Markdown async
+- [ ] Syntax edit component
+- [ ] Showcase service (extract component rendering out from component into a service)
+- [ ] Showcase component
+  - [x] Functionality
+  - [ ] Styling
+- [ ] Proper documentation and showcases for everything
+- [ ] README links to docs -> embedded snippets from docs compilation step for NPM publishing

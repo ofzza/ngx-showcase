@@ -1,0 +1,3 @@
+this.doThing = () => {
+  alert('Thing!');
+};

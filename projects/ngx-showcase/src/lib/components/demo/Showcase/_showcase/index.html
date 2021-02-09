@@ -1,0 +1,5 @@
+<ngx-showcase
+  [html]="'docs/example/index.html' | fetchAsync:'fetching ...' | async"
+  [controller]="'docs/example/index.js' | fetchAsync:'fetching ...' | async"
+  [style]="'docs/example/style.css' | fetchAsync:'fetching ...' | async"
+></ngx-showcase>

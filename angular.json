@@ -77,7 +77,7 @@
                 "output": "/"
               },
               {
-                "glob": "*",
+                "glob": "**",
                 "input": "./docs",
                 "output": "/docs"
               }

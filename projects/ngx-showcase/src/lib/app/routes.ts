@@ -6,6 +6,7 @@ import { Route, ShowcaseBasedRouting, ShowcaseArtifactTypes } from '../services'
 
 // Import components
 import { SyntaxAreaComponent, SyntaxAreaComponentShowcase } from '../components';
+import { ShowcaseComponent, ShowcaseComponentShowcase } from '../components';
 
 // Import pipes
 import { ExtractInnerSyntaxPipe, ExtractInnerSyntaxPipeShowcase } from '../pipes';
@@ -27,6 +28,11 @@ export const routes = [
     new Route('Syntax processing', 'syntax', undefined, {}, undefined, [
       // Syntax area component
       ShowcaseBasedRouting.createRouteFromArtifact(SyntaxAreaComponent, ShowcaseArtifactTypes.Component, SyntaxAreaComponentShowcase),
+    ]),
+    // Syntax processing pipes
+    new Route('Demoing', 'demo', undefined, {}, undefined, [
+      // Showcase component
+      ShowcaseBasedRouting.createRouteFromArtifact(ShowcaseComponent, ShowcaseArtifactTypes.Component, ShowcaseComponentShowcase),
     ]),
   ]),
   // Pipes

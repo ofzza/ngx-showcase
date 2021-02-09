@@ -92,10 +92,6 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
    */
   private _syntaxProcessed: { index?: number; text?: string; content: string }[] = [];
   /**
-   * Processed syntax rows count (counting wrapped content as multiple rows)
-   */
-  private _syntaxProcessedRowsCount = 0;
-  /**
    * Processed syntax's number of lines
    */
   private _syntaxProcessedLinesCount = 0;

@@ -36,7 +36,7 @@ export class AppComponent {
    */
   public _routes = routes;
 
-  constructor(markdown: MarkdownService, highlight: HighlightService) {
+  constructor(highlight: HighlightService) {
     // Register highlighting languages
     highlight.registerLanguage('xml', xml);
     highlight.registerLanguage(['js', 'javascript'], javascript);
