@@ -5,7 +5,7 @@
 import { Component } from '@angular/core';
 
 /**
- * Highlight pipe showcase
+ * Highlight service showcase
  */
 @Component({
   templateUrl: './index.html',

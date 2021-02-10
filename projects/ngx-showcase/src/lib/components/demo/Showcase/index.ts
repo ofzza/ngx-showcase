@@ -4,8 +4,14 @@
 // Import dependencies
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { Component, OnInit, OnChanges, SimpleChanges, Input, ViewChild, ComponentRef, ViewContainerRef } from '@angular/core';
-import { ModuleWithProviders, NgModule, Compiler, Injector, NgModuleRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnChanges, SimpleChanges, Input, ViewChild, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
+import {
+  CompileService,
+  ComponentCompiler,
+  ComponentCompilerHtmlError,
+  ComponentCompilerControllerError,
+  ComponentCompilerStyleError,
+} from '../../../services';
 
 // (Re)export showcase component
 export * from './_showcase';
@@ -18,19 +24,7 @@ export * from './_showcase';
   templateUrl: './index.html',
   styleUrls: ['./style.scss'],
 })
-export class ShowcaseComponent implements OnInit, OnChanges {
-  /**
-   * Holds reference to the parent module
-   */
-  private static _parentModuleRef?: ModuleWithProviders<{}>;
-  /**
-   * Registers a reference to the parent module
-   * @param parentModule reference to the parent module
-   */
-  public static _registerParentModule(parentModule: any) {
-    this._parentModuleRef = parentModule as ModuleWithProviders<{}>;
-  }
-
+export class ShowcaseComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    * Modules that need to be included to render the component
    */
@@ -92,9 +86,14 @@ export class ShowcaseComponent implements OnInit, OnChanges {
   public _editingStyleSyntaxError?: Error;
 
   /**
-   * Holds reference to (dynamically created) playground example component
+   * Holds bound component compiler
    */
-  private _exampleComponent?: ComponentRef<any>;
+  private _componentCompiler?: ComponentCompiler;
+
+  /**
+   * Subject used for debounce-ing the render (on detected changes) procedure
+   */
+  private _debouncedRenderSubject?: Subject<any>;
 
   /**
    * Handles HTML editing syntax change
@@ -161,16 +160,18 @@ export class ShowcaseComponent implements OnInit, OnChanges {
     this._render();
   }
 
-  /**
-   * Subject used for debounce-ing the render (on detected changes) procedure
-   */
-  private _debouncedRenderSubject?: Subject<any>;
-
-  constructor(private _compiler: Compiler, private _injector: Injector, private _module: NgModuleRef<any>, private _cd: ChangeDetectorRef) {}
+  constructor(private _compile: CompileService, private _cd: ChangeDetectorRef) {}
 
   public ngOnInit() {
     // Set initial editing syntax
     this._resetEditingSyntax();
+  }
+
+  public ngAfterViewInit() {
+    // Instantiate a bound compiler service
+    if (this._exampleHostEl) {
+      this._componentCompiler = this._compile.component(this._exampleHostEl);
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -215,61 +216,18 @@ export class ShowcaseComponent implements OnInit, OnChanges {
     this._editingControllerSyntaxError = undefined;
     this._editingStyleSyntaxError = undefined;
 
-    // Create a dynamic component
-    const base = this;
-    const dynamicComponentClass = Component({
-      template: this._editingHtmlSyntax,
-      styles: [this._editingStyleSyntax],
-    })(
-      class {
-        constructor() {
-          // Try evaluating the controller
-          try {
-            new Function(base._editingControllerSyntax).bind(this)();
-          } catch (err) {
-            base._editingControllerSyntaxError = err;
-          }
-        }
-      },
-    );
-
-    // Create dynamic module
-    const dynamicModuleClass = NgModule({
-      imports: [...(ShowcaseComponent._parentModuleRef ? [ShowcaseComponent._parentModuleRef] : []), ...this.modules],
-      declarations: [dynamicComponentClass],
-    })(class {});
-
-    // Attempt rendering component
-    try {
-      // Create and inject dynamically created component
-      this._compiler.compileModuleAndAllComponentsAsync(dynamicModuleClass).then(moduleWithFactories => {
-        if (this._exampleHostEl) {
-          try {
-            // Ready component for injection
-            const moduleRef = moduleWithFactories.ngModuleFactory.create(this._injector),
-              factory = moduleWithFactories.componentFactories[0],
-              component = factory.create(moduleRef.injector, [], null, this._module);
-
-            // Destroy previously dynamically added components
-            if (this._exampleComponent) {
-              this._exampleComponent.destroy();
-            }
-
-            // Inject component
-            this._exampleComponent = component;
-            this._exampleHostEl.clear();
-            this._exampleHostEl.insert(this._exampleComponent.hostView);
-
-            // Trigger change detection
-            // this._triggerDynamicComponentsChangeDetection();
-          } catch (err) {
-            this._editingHtmlSyntaxError = err;
-          }
-        }
-      });
-    } catch (err) {
-      this._editingHtmlSyntaxError = err;
-    }
+    // Render into host component
+    this._componentCompiler?.compile(this._editingHtmlSyntax, this._editingControllerSyntax, this._editingStyleSyntax, this.modules).catch(err => {
+      if (err instanceof ComponentCompilerHtmlError) {
+        this._editingHtmlSyntaxError = err;
+      }
+      if (err instanceof ComponentCompilerControllerError) {
+        this._editingControllerSyntaxError = err;
+      }
+      if (err instanceof ComponentCompilerStyleError) {
+        this._editingStyleSyntaxError = err;
+      }
+    });
 
     // Trigger change detection
     this._cd.detectChanges();

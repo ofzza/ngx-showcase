@@ -23,9 +23,10 @@ const pipes = [ExtractInnerSyntaxPipe, FetchPipe, HighlightPipe, HighlightAsyncP
 
 // Import and (re)export injectables
 export * from './services';
+import { CompileService } from './services';
 import { MarkdownService } from './services';
 import { HighlightService } from './services';
-const injectables = [MarkdownService, HighlightService];
+const injectables = [CompileService, MarkdownService, HighlightService];
 
 /**
  * Main ngx-showcase library module
@@ -38,5 +39,5 @@ const injectables = [MarkdownService, HighlightService];
 })
 export class ShowcaseModule {}
 
-// Register parent module with showcase component
-ShowcaseComponent._registerParentModule(ShowcaseModule);
+// Register parent module with showcase service
+CompileService._registerParentModule(ShowcaseModule);

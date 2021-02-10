@@ -1,14 +1,14 @@
-// Markdown service showcase
+// Compilation service showcase
 // ----------------------------------------------------------------------------
 
 // Import dependencies
 import { Component } from '@angular/core';
 
 /**
- * Markdown service showcase
+ * Compilation service showcase
  */
 @Component({
   templateUrl: './index.html',
   styleUrls: ['./style.scss'],
 })
-export class MarkdownServiceShowcase {}
+export class CompileServiceShowcase {}

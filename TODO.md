@@ -1,5 +1,5 @@
 - [ ] Syntax edit component
-- [ ] Showcase service (extract component rendering out from component into a service)
+- [x] Showcase service (extract component rendering out from component into a service)
 - [ ] Showcase component
   - [x] Functionality
   - [ ] Styling

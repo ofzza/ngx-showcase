@@ -15,6 +15,7 @@ import { MarkdownPipe, MarkdownPipeShowcase } from '../pipes';
 import { HighlightPipe, HighlightPipeShowcase } from '../pipes';
 
 // Import services
+import { CompileService, CompileServiceShowcase } from '../services';
 import { MarkdownService, MarkdownServiceShowcase } from '../services';
 import { HighlightService, HighlightServiceShowcase } from '../services';
 
@@ -51,6 +52,11 @@ export const routes = [
   ]),
   // Services
   new Route('Services', 'services', undefined, {}, undefined, [
+    // Syntax processing services
+    new Route('Runtime compilation', 'compilation', undefined, {}, undefined, [
+      // Compile service
+      ShowcaseBasedRouting.createRouteFromArtifact(CompileService, ShowcaseArtifactTypes.Service, CompileServiceShowcase),
+    ]),
     // Syntax processing services
     new Route('Syntax processing', 'syntax', undefined, {}, undefined, [
       // Markdown service
