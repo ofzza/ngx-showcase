@@ -13,7 +13,7 @@
     <!-- Expansion holder - ensures container provides scrolling -->
     <div #syntaxareaExpansion style="opacity: 0; color: transparent; pointer-events: none" class="syntaxarea-expand"></div>
     <!-- Syntax lines (Manual padding for line-numbers when line-number are being shown) -->
-    <div #syntaxareaView class="syntaxarea-view ngx-syntaxarea-syntax" [innerHTML]="_content">
+    <div #syntaxareaView class="syntaxarea-view ngx-syntaxarea-syntax" [contentEditable]="_editable" [innerHTML]="_content" (input)="_syntaxEdited($event)">
       <!-- Syntax lines ... -->
       <!-- Injected directly for performance reasons -->
     </div>

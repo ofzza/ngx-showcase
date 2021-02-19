@@ -1,7 +1,11 @@
-- [ ] Syntax edit component
-- [x] Showcase service (extract component rendering out from component into a service)
-- [ ] Showcase component
+- [/] Syntax edit component
   - [x] Functionality
+  - [ ] Fix scroll precision
+  - [ ] Fix line number offset on load
+- [x] Showcase service (extract component rendering out from component into a service)
+- [/] Showcase component
+  - [x] Functionality
+  - [ ] Use syntax edit components
   - [ ] Styling
 - [ ] Proper documentation and showcases for everything
 - [ ] README links to docs -> embedded snippets from docs compilation step for NPM publishing

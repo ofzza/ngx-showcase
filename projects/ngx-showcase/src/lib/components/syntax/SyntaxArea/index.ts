@@ -2,11 +2,37 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
-import { Component, OnChanges, SimpleChanges, AfterViewInit, OnDestroy, ViewChild, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  SimpleChanges,
+  AfterViewInit,
+  OnDestroy,
+  ViewChild,
+  Input,
+  Output,
+  EventEmitter,
+  ElementRef,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 // (Re)export showcase component
 export * from './_showcase';
+
+/**
+ * Stores syntax area display content
+ */
+export interface SyntaxAreaContent {
+  startLine: number;
+  endLine: number;
+}
+/**
+ * Stores syntax area display content change
+ */
+export interface SyntaxAreaChange extends SyntaxAreaContent {
+  content: string;
+}
 
 /**
  * Syntax area component, used to display code/syntax
@@ -17,6 +43,12 @@ export * from './_showcase';
   styleUrls: ['./style.scss'],
 })
 export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy {
+  /**
+   * If content should be editable
+   */
+  @Input()
+  public _editable = false;
+
   /**
    * Syntax to display
    */
@@ -34,6 +66,12 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
    */
   @Input()
   public numbers = false;
+
+  /**
+   * Event triggering on content edited
+   */
+  @Output()
+  public _change = new EventEmitter<SyntaxAreaChange>();
 
   /**
    * Syntax line numbers container element
@@ -80,6 +118,10 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
    * Holds lines to output to view
    */
   public _content?: SafeHtml;
+  /**
+   * Holds displayed content
+   */
+  private _displayed?: SyntaxAreaContent;
 
   /**
    * Resize observer, used to track size changes to the syntaxarea element
@@ -90,7 +132,7 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
   /**
    * Processed syntax
    */
-  private _syntaxProcessed: { index?: number; text?: string; content: string }[] = [];
+  private _syntaxProcessed: { row: number; index: number; content: string }[] = [];
   /**
    * Processed syntax's number of lines
    */
@@ -166,6 +208,28 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
   }
 
   /**
+   * Gets editing cursor position
+   */
+  public _getCursorPosition(): Range {
+    const range = document.createRange(),
+      caret = window.getSelection()?.getRangeAt(0);
+    if (caret) {
+      range.setStart(caret.startContainer, caret.startOffset);
+      range.setEnd(caret.endContainer, caret.endOffset);
+      range.collapse();
+    }
+    return range;
+  }
+  /**
+   * Sets editing cursor position
+   * @param range Range instance describing cursor position
+   */
+  public _setCursorPosition(range: Range) {
+    // Adds a Range to a Selection
+    window.getSelection()?.addRange(range);
+  }
+
+  /**
    * Detect line lengths and count of output area
    */
   private _detectDimensions(): boolean {
@@ -223,9 +287,19 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
     let lines: string[];
     // If previously processed syntax is start of current syntax, reuse processed info
     if (previousSyntaxValue && previousSyntaxValue.length < this.syntax.length && this.syntax.startsWith(previousSyntaxValue)) {
-      lines = this.syntax.substr(previousSyntaxValue.length).split('\n');
+      // Get previous value except for last line
+      const previousSyntaxValueSansLastLineIndex = previousSyntaxValue.lastIndexOf('\n'),
+        previousSyntaxValueSansLastLine =
+          previousSyntaxValueSansLastLineIndex !== -1 ? `${previousSyntaxValue.substr(0, previousSyntaxValueSansLastLineIndex)}\n` : '';
+      // Get additional lines
+      lines = this.syntax.substr(previousSyntaxValueSansLastLine.length).split('\n');
       this._syntaxProcessedLinesCount += lines.length;
+      // Drop previously processed last line (will be updated)
+      if (this._syntaxProcessed.length) {
+        this._syntaxProcessed = this._syntaxProcessed.slice(0, this._syntaxProcessed.length - 1);
+      }
     }
+
     // If previously processed syntax is not start of current syntax, reset processed info
     else {
       this._syntaxProcessed = [];
@@ -246,8 +320,10 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
       }
 
       // Store processed line
+      const previousLine = this._syntaxProcessed.length ? this._syntaxProcessed[this._syntaxProcessed.length - 1] : undefined;
       this._syntaxProcessed.push({
-        index: this._syntaxProcessed.length + 1,
+        row: this._syntaxProcessed.length + 1,
+        index: previousLine ? previousLine.index + previousLine.content.length : 0,
         content: line,
       });
     });
@@ -316,7 +392,7 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
     this._numbers = [];
     for (let i = 0; i < this._syntaxareaRowsCount; i++) {
       if (this._syntaxProcessed.length > offsetCharsTop + i) {
-        const num = this._syntaxProcessed[offsetCharsTop + i]?.index?.toString();
+        const num = this._syntaxProcessed[offsetCharsTop + i]?.row?.toString();
         this._numbers.push((num || '').padEnd(numbersMaxCharCount, ' ').replace(/ /g, '&nbsp;'));
       }
     }
@@ -326,32 +402,47 @@ export class SyntaxAreaComponent implements OnChanges, AfterViewInit, OnDestroy 
     const lineOffset = this.numbers && this.wrap ? numbersMaxCharCount * this._charWidth : 0;
     for (let i = 0; i < this._syntaxareaRowsCount; i++) {
       if (this._syntaxProcessed.length > offsetCharsTop + i) {
+        // Get line
         const line = this._syntaxProcessed[offsetCharsTop + i];
-        if (line.index) {
-          lines.push(`
-            <div class="syntax-line" style="min-width: 1px; min-height: ${this._charHeight}px">
-              ${
-                this.numbers && this.wrap
-                  ? `<span class="syntax-line-index ngx-syntaxarea-linenums" style="left: ${-1 * lineOffset}px">${line.index
-                      .toString()
-                      .padEnd(numbersMaxCharCount, ' ')
-                      .replace(/ /g, '&nbsp;')}</span>`
-                  : ''
-              }
-              <span class="syntax-line-content">${line.content}</span>
-            </div>
-          `);
-        }
+        // Render line
+        lines.push(
+          `<div class="syntax-line" style="min-width: 1px; min-height: ${this._charHeight}px">${
+            this.numbers && this.wrap
+              ? `<span class="syntax-line-index ngx-syntaxarea-linenums" style="left: ${-1 * lineOffset}px">${line.row
+                  .toString()
+                  .padEnd(numbersMaxCharCount, ' ')
+                  .replace(/ /g, '&nbsp;')}</span>`
+              : ''
+          }<span class="syntax-line-content">${line.content || '&nbsp;'}</span></div>`,
+        );
       }
     }
-    this._content = this._sanitizer.bypassSecurityTrustHtml(lines.join('\n'));
+    const renderedContent = lines.join('').replace(/>\n/g, '>');
+    this._content = this._sanitizer.bypassSecurityTrustHtml(renderedContent);
     this._syntaxareaViewEl.nativeElement.style.paddingLeft = `${lineOffset}px`;
 
     // Translate view to account for scrolled offset
     const scrollTop = this._syntaxareaEl.nativeElement.scrollTop;
     this._syntaxareaViewEl.nativeElement.style.transform = `translateY(${scrollTop}px)`;
 
+    // Store currently displayed state
+    this._displayed = {
+      startLine: offsetCharsTop,
+      endLine: offsetCharsTop + this._syntaxareaRowsCount,
+    };
+
     // Trigger change detection
     this._cd.detectChanges();
+  }
+
+  /**
+   * Handles syntax having been manually edited
+   */
+  public _syntaxEdited(_: Event) {
+    // Trigger change events
+    const currentSyntax = this._syntaxareaViewEl?.nativeElement.innerText;
+    if (this._displayed && currentSyntax) {
+      this._change.emit({ startLine: this._displayed.startLine, endLine: this._displayed.endLine, content: currentSyntax });
+    }
   }
 }

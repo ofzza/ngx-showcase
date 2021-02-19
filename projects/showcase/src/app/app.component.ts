@@ -8,6 +8,7 @@ import { routes, MarkdownService, HighlightService } from '../../../ngx-showcase
 // Import highlight.js languages
 import * as xml from 'highlight.js/lib/languages/xml';
 import * as javascript from 'highlight.js/lib/languages/javascript';
+import * as css from 'highlight.js/lib/languages/css';
 
 // Register markdown web-worker
 MarkdownService.registerWorker(() => {
@@ -38,7 +39,8 @@ export class AppComponent {
 
   constructor(highlight: HighlightService) {
     // Register highlighting languages
-    highlight.registerLanguage('xml', xml);
+    highlight.registerLanguage(['xml', 'html'], xml);
     highlight.registerLanguage(['js', 'javascript'], javascript);
+    highlight.registerLanguage(['css'], css);
   }
 }

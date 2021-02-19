@@ -2,7 +2,22 @@
 <div #renderHost></div>
 
 <!-- Syntax edit -->
-<textarea [ngClass]="{ error: _editingHtmlSyntaxError }" [value]="_editingHtmlSyntax" (input)="_updateEditingHtmlSyntax($event)"></textarea>
-<textarea [ngClass]="{ error: _editingControllerSyntaxError }" [value]="_editingControllerSyntax" (input)="_updateEditingControllerSyntax($event)"></textarea>
-<textarea [ngClass]="{ error: _editingStyleSyntaxError }" [value]="_editingStyleSyntax" (input)="_updateEditingStyleSyntax($event)"></textarea>
+<ngx-syntaxedit
+  [ngClass]="{ error: _editingHtmlSyntaxError }"
+  [syntax]="_editingHtmlSyntax"
+  [language]="'html'"
+  (input)="_updateEditingHtmlSyntax($event)"
+></ngx-syntaxedit>
+<ngx-syntaxedit
+  [ngClass]="{ error: _editingControllerSyntaxError }"
+  [syntax]="_editingControllerSyntax"
+  [language]="'js'"
+  (input)="_updateEditingControllerSyntax($event)"
+></ngx-syntaxedit>
+<ngx-syntaxedit
+  [ngClass]="{ error: _editingStyleSyntaxError }"
+  [syntax]="_editingStyleSyntax"
+  [language]="'css'"
+  (input)="_updateEditingStyleSyntax($event)"
+></ngx-syntaxedit>
 <button (click)="_resetEditingSyntax()">Reset</button>

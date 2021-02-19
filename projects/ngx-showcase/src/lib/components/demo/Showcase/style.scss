@@ -1,6 +1,8 @@
-textarea {
+ngx-syntaxedit {
+  display: block;
   width: 100%;
-  min-height: 240px;
+  height: 240px;
+  margin-bottom: 10px;
 
   &.error {
     border-color: red;
