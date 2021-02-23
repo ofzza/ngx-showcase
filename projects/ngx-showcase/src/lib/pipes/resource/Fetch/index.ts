@@ -20,10 +20,8 @@ export class FetchPipe {
    * Fetches a remote resource from a URL
    * @param url URL of the requested resource
    */
-  public transform(url: string, pendingContent?: string): Observable<string> {
+  public transform(url: string): Observable<string> {
     return new Observable<string>(subscriber => {
-      // Set initial value if set
-      subscriber.next(pendingContent);
       // Fetch resource
       this._http.get(url, { responseType: 'blob' }).subscribe(res => {
         res.text().then(

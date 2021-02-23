@@ -10,13 +10,13 @@ const modules = [CommonModule, HttpClientModule];
 // Import and (re)export child components
 export * from './components';
 import { SyntaxAreaComponent, SyntaxAreaComponentShowcase } from './components';
-import { SyntaxEditComponent, SyntaxEditComponentShowcase } from './components';
+// import { SyntaxEditComponent, SyntaxEditComponentShowcase } from './components';
 import { ShowcaseComponent, ShowcaseComponentShowcase } from './components';
 const components = [
   SyntaxAreaComponent,
   SyntaxAreaComponentShowcase,
-  SyntaxEditComponent,
-  SyntaxEditComponentShowcase,
+  // SyntaxEditComponent,
+  // SyntaxEditComponentShowcase,
   ShowcaseComponent,
   ShowcaseComponentShowcase,
 ];

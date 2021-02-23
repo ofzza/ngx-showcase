@@ -35,47 +35,19 @@
   }
 }
 
-.animation-container {
-  position: relative;
-  display: inline-block;
-  width: 300px;
-  height: 10px;
-  padding-top: 2px;
-
-  .animation {
-    position: absolute;
-    left: 0;
-    display: block;
-    width: 10px;
-    height: 10px;
-    border: 1px solid red;
-    border-radius: 50%;
-
-    animation: is-live ease 2000ms;
-    animation-iteration-count: infinite;
-  }
-
-  @keyframes is-live {
-    0% {
-      transform: translateX(0px);
-    }
-    50% {
-      transform: translateX(288px);
-    }
-    100% {
-      transform: translateX(0px);
-    }
-  }
-}
-
 ::ng-deep {
-  .ngx-syntaxarea {
+  ngx-syntaxarea {
+    position: relative;
+    padding: 4pt;
+    border: 1px solid black;
     background: #eee;
-  }
-  .ngx-syntaxarea-linenums {
-    color: gray;
-  }
-  .ngx-syntaxarea-syntax {
-    // color: limegreen;
+
+    &.loading::before {
+      content: 'LOADING ...';
+      position: absolute;
+      top: 8px;
+      right: 28px;
+      color: red;
+    }
   }
 }

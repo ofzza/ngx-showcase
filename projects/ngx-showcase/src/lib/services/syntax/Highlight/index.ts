@@ -5,6 +5,7 @@
 import { Observable, Subscriber } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { registerLanguage, render } from './highlight-js';
+import { TWorkerInvocationRequest, TWorkerInvocationResponse } from '../workers';
 
 // (Re)export worker
 export * from './worker';
@@ -43,7 +44,13 @@ export class HighlightService {
   /**
    * Holds promises awaiting resolution/rejection by their unique message IDs
    */
-  private _pendingAsyncQueue: Record<number, { subscriber: Subscriber<string | Error>; cache?: string }> = {};
+  private _pendingAsyncQueue: Record<
+    number,
+    {
+      subscriber: Subscriber<string | Error>;
+      monitor?: (res: TWorkerInvocationResponse | Error) => void;
+    }
+  > = {};
 
   constructor() {
     // If using web-workers, instantiate a web-worker
@@ -79,24 +86,35 @@ export class HighlightService {
    * Converts a language code syntax into highlighted HTML asynchronously using a web-worker
    * @param syntax Language code syntax to convert
    * @param language Language to convert into
+   * @param streamPacketSize (Optional) If set to larger than 0, will stream result in packets of requested size
+   * (allows for main thread not to get blocked processing a single large packet)
+   * @param streamPacketDelay (Optional) If streaming packets, sets delay between packets
+   * (allows for main thread not to get blocked by too many packets)
+   * @param streamMonitorCallback (Optional) Callback invoked with every streamed package as it is streamed
    */
-  public renderAsync(syntax: string, language?: string): Observable<string | Error> {
+  public renderAsync(
+    syntax: string,
+    language?: string,
+    streamPacketSize: number = 0,
+    streamPacketDelay: number = 1,
+    streamMonitorCallback?: (res: TWorkerInvocationResponse | Error) => void,
+  ): Observable<string | Error> {
     return new Observable<string | Error>(subscriber => {
       // If using a web-worker, invoke a render using web-worker
       if (this._worker) {
         // Register to pending messages queue
         const id = this._idNext++;
-        this._pendingAsyncQueue[id] = { subscriber };
+        this._pendingAsyncQueue[id] = { subscriber, monitor: streamMonitorCallback };
 
         // Post message to web-worker
-        this._worker.postMessage(
-          JSON.stringify({
-            id,
-            method: 'render',
-            args: { syntax, language },
-            streamBlockSize: 1_000_000,
-          }),
-        );
+        const req: TWorkerInvocationRequest = {
+          id,
+          method: 'render',
+          args: { syntax, language },
+          streamPacketSize,
+          streamPacketDelay,
+        };
+        this._worker.postMessage(JSON.stringify(req));
       }
 
       // If service-worker not available, execute sync render
@@ -120,30 +138,35 @@ export class HighlightService {
    */
   private processAsyncResult(msg: MessageEvent<any>) {
     // Parse received data
-    const data = JSON.parse(msg.data) as { id: number; success: boolean; result: string };
+    const res = JSON.parse(msg.data) as TWorkerInvocationResponse;
 
     // Check if message expected
-    if (!this._pendingAsyncQueue[data.id]) {
+    if (!this._pendingAsyncQueue[res.id]) {
       throw new Error('Received unexpected message from web-worker!');
     }
 
     // Handle successful execution
-    if (data.success) {
-      // Append to cache
-      const cache = (this._pendingAsyncQueue[data.id].cache =
-        (this._pendingAsyncQueue[data.id].cache ? this._pendingAsyncQueue[data.id].cache : '') + data.result);
+    if (res.success) {
+      // If streaming, decorate cache string to signify streaming complete or not complete
+      const isStreamComplete = !res.streaming || res.streaming[0] === res.streaming[1];
       // Resolve result
-      this._pendingAsyncQueue[data.id].subscriber.next(cache);
+      this._pendingAsyncQueue[res.id].subscriber.next(res.result);
+      // If monitoring stream, invoke monitor callback
+      this._pendingAsyncQueue[res.id].monitor?.(res);
       // Check if finished streaming
-      if (data.result === '') {
-        this._pendingAsyncQueue[data.id].subscriber.complete();
-        delete this._pendingAsyncQueue[data.id];
+      if (isStreamComplete) {
+        this._pendingAsyncQueue[res.id].subscriber.complete();
+        delete this._pendingAsyncQueue[res.id];
       }
     }
 
     // Handle failed execution
     else {
-      this._pendingAsyncQueue[data.id].subscriber.error(new Error(data.result));
+      // Throw error to subscriber
+      const err = new Error(res.result);
+      this._pendingAsyncQueue[res.id].subscriber.error(err);
+      // If monitoring stream, invoke monitor callback
+      this._pendingAsyncQueue[res.id].monitor?.(err);
     }
   }
 }

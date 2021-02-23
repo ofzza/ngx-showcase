@@ -16,9 +16,9 @@ export class SyntaxAreaComponentShowcase {
   private _str?: string;
   public _count = 1;
   private _multiplied?: string;
-  public _view = 1;
-  public setCount(e: Event) {
-    this._count = parseInt((e.target as HTMLInputElement).value, 10) || 0;
+  public _view = 3;
+  public setCount(value: string) {
+    this._count = parseInt(value, 10) || 0;
   }
   public _multiply(str: null | string, n: number): string {
     if (!str) return '';
@@ -27,5 +27,8 @@ export class SyntaxAreaComponentShowcase {
     } else {
       return (this._multiplied = Array.from({ length: (this._n = n) + 1 }, _ => '').join((this._str = str))) as string;
     }
+  }
+  public _monitor(res: any) {
+    console.log(`> Streaming:`, res.streaming ? `${res.streaming[0]}/${res.streaming[1]}` : 'Done!');
   }
 }

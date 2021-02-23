@@ -51,16 +51,16 @@ const defaultOptions: TMarkdownOptions = {
 export function render(syntax: string, options?: TMarkdownOptions, highlight?: HighlightService) {
   // Set options
   const margedOptions = {
+    // Default options
+    ...defaultOptions,
+    // User configured options
+    ...options,
     // Non exposed options
     ...(highlight
       ? {
           highlight: highlight.render,
         }
       : {}),
-    // User configured options
-    ...options,
-    // Default options
-    ...defaultOptions,
   };
   _markdownit.set(margedOptions);
   // Trim

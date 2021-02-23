@@ -2,10 +2,5 @@
 <div [innerHTML]="'Content via NG binding!'" (click)="doThing()">Default content!</div>
 <hr />
 
-<ngx-syntaxarea
-  [syntax]="'docs/syntax.js' | fetchAsync:'fetching ...' | async | highlightAsync:'js':'highlighting ...' | async"
-  [wrap]="false"
-  [numbers]="true"
->
-</ngx-syntaxarea>
+<ngx-syntaxarea [syntax]="'docs/syntax.js' | fetchAsync | async | highlightAsync:'js' | async" [wrap]="false" [numbers]="true"> </ngx-syntaxarea>
 <hr />

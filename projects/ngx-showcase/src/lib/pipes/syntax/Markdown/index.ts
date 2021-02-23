@@ -3,9 +3,9 @@
 
 // Import dependencies
 import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Pipe } from '@angular/core';
-import { MarkdownService, TMarkdownOptions, HighlightService } from '../../../services';
+import { MarkdownService, TMarkdownOptions, TWorkerInvocationResponse } from '../../../services';
 
 // (Re)export showcase component
 export * from './_showcase';
@@ -50,36 +50,25 @@ export class MarkdownAsyncPipe {
    *  - breaks: Convert line-breaks into <br /> elements
    *  - linkify: Convert URLs to links
    *  - quotes: Replacement quotes
-   * @param pendingSyntax (Optional) Syntax to display while highlight is being processed
-   *  - (Default) If string value, the value will be shown until replaced with highlighted result
-   *  - If true, the original, non-highlighted value will be shown until replaced with highlighted result
-   * @param errorSyntax (Optional) Syntax to display if highlight processing fails
-   *  - (Default) If undefined, non-highlighted value will be shown in case highlighting fails
-   *  - If string value, the value will be shown in case highlighting fails
-   *  - If true, the error message returned by the highlighting service will be shown in case highlighting fails
+   * @param streamPacketSize (Optional) If set to larger than 0, will stream result in packets of requested size
+   * (allows for main thread not to get blocked processing a single large packet)
+   * @param streamPacketDelay (Optional) If streaming packets, sets delay between packets
+   * (allows for main thread not to get blocked by too many packets)
+   * @param streamMonitorCallback (Optional) Callback invoked with every streamed package as it is streamed
    */
   public transform(
     syntax?: string | null,
     options?: TMarkdownOptions,
-    pendingSyntax: true | string = true,
-    errorSyntax: boolean | string = false,
+    streamPacketSize: number = 0,
+    streamPacketDelay: number = 1,
+    streamMonitorCallback?: (res: TWorkerInvocationResponse | Error) => void,
   ): Observable<string> {
     return (
       this._markdown
         // Render
-        .renderAsync(syntax || '', options)
-        // Set initial value if set
-        .pipe(startWith(pendingSyntax === true ? syntax || '' : pendingSyntax))
+        .renderAsync(syntax || '', options, streamPacketSize, streamPacketDelay, streamMonitorCallback)
         // Resolve value or error
-        .pipe(
-          map(data => {
-            if (data instanceof Error) {
-              return errorSyntax === false ? syntax || '' : errorSyntax === true ? data.message : errorSyntax;
-            } else {
-              return data;
-            }
-          }),
-        )
+        .pipe(map(data => (data instanceof Error ? '' : data)))
     );
   }
 }

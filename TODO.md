@@ -1,5 +1,10 @@
-- [/] Syntax edit component
-  - [x] Functionality
+- [/] Syntax view component
+  - [x] Support streaming (accept Observable) input
+  - [x] Render all lines to allow for easier editing and selections
+  - [ ] Fix wrapped layout
+  - [ ] Optimize shown lines' visibility (for quicker render): visibility, content-visibility, contain-intrinsic-size
+- [ ] Syntax edit component
+  - [ ] Functionality
   - [ ] Fix scroll precision
   - [ ] Fix line number offset on load
 - [x] Showcase service (extract component rendering out from component into a service)

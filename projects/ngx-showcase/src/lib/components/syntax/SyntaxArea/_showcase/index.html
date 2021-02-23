@@ -4,7 +4,7 @@
     Exposes classes: .ngx-syntaxarea, .ngx-syntaxarea-linenums, .ngx-syntaxarea-syntax
 
     <!-- Description -->
-    <div class="description" [innerHTML]="'docs/example.md' | fetchAsync:'fetching ...' | async | markdownAsync:{}:'parsing ...' | async"></div>
+    <div class="description" [innerHTML]="'docs/example.md' | fetchAsync | async | markdownAsync:{} | async"></div>
   </div>
 
   <!-- Display select -->
@@ -16,27 +16,22 @@
 
     :::
 
-    <input type="number" min="1" max="1000" [step]="1" [value]="_count" (input)="setCount($event)" />
-
-    :::
-
-    <div class="animation-container">
-      <div class="animation"></div>
-    </div>
+    <input #count type="number" min="1" max="1000" [step]="1" [value]="_count" />
+    <button (click)="setCount(count.value)">(Re)Generate</button>
   </div>
 
   <!-- Example code -->
   <div class="syntax-container">
     <ng-container *ngIf="_view === 1">
       <div class="syntax">
-        <textarea [value]="_multiply(('docs/syntax.js' | fetchAsync:'fetching ...' | async), _count)"></textarea>
+        <textarea [value]="_multiply(('docs/syntax.js' | fetchAsync | async), _count)"></textarea>
       </div>
     </ng-container>
 
     <ng-container *ngIf="_view === 2">
       <div class="syntax">
         <pre>
-          <code [innerHTML]="_multiply(('docs/syntax.js' | fetchAsync:'fetching ...' | async), _count) | highlightAsync:'js':'highlighting ...' | async">
+          <code [innerHTML]="_multiply(('docs/syntax.js' | fetchAsync | async), _count) | highlightAsync:'js' | async">
           </code>
         </pre>
       </div>
@@ -45,7 +40,7 @@
     <ng-container *ngIf="_view === 3">
       <div class="syntax">
         <ngx-syntaxarea
-          [syntax]="(_multiply(('docs/syntax.js' | fetchAsync:'fetching ...' | async), _count) | highlightAsync:'js':'highlighting ...' | async)"
+          [syntax]="_multiply(('docs/syntax.js' | fetchAsync | async), _count) | highlightAsync:'js':10000:100:_monitor"
           [wrap]="false"
           [numbers]="true"
         ></ngx-syntaxarea>
@@ -55,7 +50,7 @@
     <ng-container *ngIf="_view === 4">
       <div class="syntax">
         <ngx-syntaxarea
-          [syntax]="(_multiply(('docs/syntax.js' | fetchAsync:'fetching ...' | async), _count) | highlightAsync:'js':'highlighting ...' | async)"
+          [syntax]="_multiply(('docs/syntax.js' | fetchAsync | async), _count) | highlightAsync:'js':10000:100:_monitor"
           [wrap]="true"
           [numbers]="true"
         ></ngx-syntaxarea>
