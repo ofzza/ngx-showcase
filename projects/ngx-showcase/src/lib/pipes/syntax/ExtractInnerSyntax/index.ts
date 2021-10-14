@@ -31,7 +31,7 @@ export class ExtractInnerSyntaxPipe {
     else if (target instanceof TemplateRef) {
       // TODO: Implement extraction from <ng-template /> by dynamically creating a component consuming and projecting
       // the template (@angular/compiler), then fetching projected content
-      throw new Error('Extracting syntax from TempalteRef not implemented yet!');
+      throw new Error('Extracting syntax from TemplateRef not implemented yet!');
     }
     // Consider already extracted
     else {

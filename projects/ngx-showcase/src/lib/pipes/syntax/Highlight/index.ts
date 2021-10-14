@@ -21,7 +21,7 @@ export class HighlightPipe {
    * Converts syntax of a known language into HTML
    * @param syntax Language code syntax to convert
    */
-  public transform(syntax: string, lang?: string): string {
+  public transform(syntax?: string | null, lang?: string): string {
     return this._highlight.render(syntax, lang);
   }
 }

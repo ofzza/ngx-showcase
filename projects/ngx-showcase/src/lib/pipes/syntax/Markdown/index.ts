@@ -29,7 +29,7 @@ export class MarkdownPipe {
    *  - quotes: Replacement quotes
    */
   public transform(syntax?: string | null, options?: TMarkdownOptions): string {
-    return this._markdown.render(syntax || '', options);
+    return this._markdown.render(syntax, options);
   }
 }
 

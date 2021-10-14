@@ -3,6 +3,11 @@
   width: 100%;
   height: 100%;
   font-family: monospace;
+  &:focus-within {
+    outline-offset: 2px;
+    outline: 1px solid black;
+    outline: 1px auto -webkit-focus-ring-color;
+  }
 
   & > div.content {
     position: relative;
@@ -34,6 +39,10 @@
     & > .content-syntax {
       flex-grow: 1;
       height: 100%;
+
+      &:focus {
+        outline: none;
+      }
 
       ::ng-deep {
         & > div {

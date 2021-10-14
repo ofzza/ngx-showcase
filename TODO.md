@@ -1,12 +1,13 @@
+- [ ] Async pipes (Fetch/Markdown/Highlight)
+  - [ ] Unsubscribe on unload
 - [/] Syntax view component
   - [x] Support streaming (accept Observable) input
   - [x] Render all lines to allow for easier editing and selections
+  - [x] Optimize shown lines' visibility (for quicker render): visibility, content-visibility, contain-intrinsic-size
   - [ ] Fix wrapped layout
-  - [ ] Optimize shown lines' visibility (for quicker render): visibility, content-visibility, contain-intrinsic-size
 - [ ] Syntax edit component
   - [ ] Functionality
-  - [ ] Fix scroll precision
-  - [ ] Fix line number offset on load
+  - [ ] Fix line numbers not being editable
 - [x] Showcase service (extract component rendering out from component into a service)
 - [/] Showcase component
   - [x] Functionality

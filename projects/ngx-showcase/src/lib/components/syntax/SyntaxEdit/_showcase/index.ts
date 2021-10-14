@@ -11,4 +11,8 @@ import { Component } from '@angular/core';
   templateUrl: './index.html',
   styleUrls: ['./style.scss'],
 })
-export class SyntaxEditComponentShowcase {}
+export class SyntaxEditComponentShowcase {
+  public handleChange(syntax: string) {
+    console.log(syntax);
+  }
+}

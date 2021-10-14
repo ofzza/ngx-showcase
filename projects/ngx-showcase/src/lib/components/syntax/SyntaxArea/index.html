@@ -1,5 +1,5 @@
 <!-- Component container -->
 <div class="content" [ngClass]="[(wrap ? 'wrapped' : '')]">
   <div class="content-line-numbers">{{_linesElementsAll.length.toString()}}</div>
-  <div #syntaxarea class="content-syntax"></div>
+  <div #syntaxarea [contentEditable]="_contentEditable " (input)="_onInput($event)" class="content-syntax"></div>
 </div>

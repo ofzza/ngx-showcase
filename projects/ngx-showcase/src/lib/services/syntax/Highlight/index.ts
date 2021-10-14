@@ -2,7 +2,7 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
-import { Observable, Subscriber } from 'rxjs';
+import { Observable, Subscriber, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { registerLanguage, render } from './highlight-js';
 import { TWorkerInvocationRequest, TWorkerInvocationResponse } from '../workers';
@@ -77,7 +77,11 @@ export class HighlightService {
    * @param syntax Language code syntax to convert
    * @param language Language to convert into
    */
-  public render(syntax: string, language?: string): string {
+  public render(syntax?: string | null, language?: string): string {
+    // If no syntax, return not-rendered
+    if (!syntax) {
+      return '';
+    }
     // Convert into explicitly specified language
     return render(syntax, language);
   }
@@ -93,12 +97,17 @@ export class HighlightService {
    * @param streamMonitorCallback (Optional) Callback invoked with every streamed package as it is streamed
    */
   public renderAsync(
-    syntax: string,
+    syntax?: string | null,
     language?: string,
     streamPacketSize: number = 0,
     streamPacketDelay: number = 1,
     streamMonitorCallback?: (res: TWorkerInvocationResponse | Error) => void,
   ): Observable<string | Error> {
+    // If no syntax, return not-rendered
+    if (!syntax) {
+      return of<string>(syntax || '');
+    }
+    // Convert into a observable to be resolved asynchronously
     return new Observable<string | Error>(subscriber => {
       // If using a web-worker, invoke a render using web-worker
       if (this._worker) {

@@ -1,10 +1,10 @@
 <div class="ngx-syntaxedit-container">
   <ngx-syntaxarea
     #syntaxarea
-    [_editable]="true"
-    [syntax]="(_editingSyntax || '') | highlight:language"
+    [_contentEditable]="true"
+    (_syntaxChange)="_onSyntaxChange($event)"
+    [syntax]="_editingSyntax || ''"
     [wrap]="wrap"
     [numbers]="numbers"
-    (_change)="_updateSyntax($event)"
   ></ngx-syntaxarea>
 </div>

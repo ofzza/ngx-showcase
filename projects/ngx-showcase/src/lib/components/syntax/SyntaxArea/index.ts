@@ -4,7 +4,20 @@
 // Import dependencies
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { Component, OnChanges, SimpleChanges, AfterViewInit, Input, HostBinding, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  SimpleChanges,
+  AfterViewInit,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter,
+  HostBinding,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+} from '@angular/core';
 
 // (Re)export showcase component
 export * from './_showcase';
@@ -26,12 +39,12 @@ type TLineRefs = { numEl?: HTMLElement; syntaxEl: HTMLElement; lineEl: HTMLEleme
   templateUrl: './index.html',
   styleUrls: ['./style.scss'],
 })
-export class SyntaxAreaComponent implements AfterViewInit, OnChanges {
+export class SyntaxAreaComponent implements AfterViewInit, OnChanges, OnDestroy {
   /**
    * Syntax to display
    */
   @Input()
-  public syntax?: string | Observable<string> = '';
+  public syntax: string | Observable<string> | null = '';
 
   /**
    * If displayed syntax should be wrapped
@@ -56,6 +69,18 @@ export class SyntaxAreaComponent implements AfterViewInit, OnChanges {
    */
   @HostBinding('class.loading')
   public _loading = false;
+
+  /**
+   * Private property, used to make syntaxarea component editable
+   */
+  @Input()
+  public _contentEditable = false;
+  /**
+   * Private property, used to make syntaxarea component editable
+   */
+  @Output()
+  public _syntaxChange = new EventEmitter<Event>();
+
   /**
    * Holds input syntax subscription being processed
    */
@@ -155,6 +180,11 @@ export class SyntaxAreaComponent implements AfterViewInit, OnChanges {
         );
       }
     }
+  }
+
+  public ngOnDestroy() {
+    // Unsubscribe from any further streaming syntax
+    this._syntaxSubscription?.unsubscribe();
   }
 
   /**
@@ -283,5 +313,21 @@ export class SyntaxAreaComponent implements AfterViewInit, OnChanges {
     }
     // Hide syntax content on non-showing rows
     lineRefs.syntaxEl.classList[visible ? 'remove' : 'add']('offview');
+  }
+
+  /**
+   * Triggered on syntax being edited (only when used with private [_contentEditable] property set to true)
+   * @param e Input event
+   */
+  public _onInput(e: Event) {
+    // Forward event
+    this._syntaxChange.emit(e);
+  }
+
+  /**
+   * Gets current HTML state of syntax being edited
+   */
+  public _getEditingSyntaxContainerElement() {
+    return this._syntaxareaEl?.nativeElement;
   }
 }
