@@ -51,7 +51,7 @@ export function initializeHighlightServiceWebWorker(): (key: string | string[], 
           const res: TWorkerInvocationResponse = { id: data.id, success: true, result, streaming: false };
           postMessage(JSON.stringify(res));
         }
-      } catch (err) {
+      } catch (err: any) {
         const errMessage = err.message.toString(),
           res: TWorkerInvocationResponse = { id: data.id, success: false, result: errMessage, streaming: false };
         postMessage(JSON.stringify(res));

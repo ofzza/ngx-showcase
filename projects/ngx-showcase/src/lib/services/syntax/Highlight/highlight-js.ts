@@ -2,7 +2,7 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
-import * as highlightjs from 'highlight.js';
+import hljs from 'highlight.js';
 
 /**
  * Registers a highlight.js language syntax
@@ -12,11 +12,11 @@ import * as highlightjs from 'highlight.js';
 export function registerLanguage(key: string | string[], language: any) {
   // Register language under multiple keys
   if (key instanceof Array) {
-    key.forEach(k => highlightjs.registerLanguage(k, language));
+    key.forEach(k => hljs.registerLanguage(k, language));
   }
   // Register language
   else {
-    highlightjs.registerLanguage(key, language);
+    hljs.registerLanguage(key, language);
   }
 }
 
@@ -28,11 +28,11 @@ export function registerLanguage(key: string | string[], language: any) {
 export function render(syntax: string, language?: string): string {
   // Convert into explicitly specified language
   if (language) {
-    return highlightjs.highlight(language, syntax).value;
+    return hljs.highlight(language, syntax).value;
   }
 
   // Auto detect target language
   else {
-    return highlightjs.highlightAuto(syntax).value;
+    return hljs.highlightAuto(syntax).value;
   }
 }

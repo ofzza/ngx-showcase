@@ -6,18 +6,24 @@
   [ngClass]="{ error: _editingHtmlSyntaxError }"
   [syntax]="_editingHtmlSyntax"
   [highlight]="'html'"
+  [wrap]="false"
+  [numbers]="false"
   (syntaxChange)="_updateEditingHtmlSyntax($event)"
 ></ngx-syntaxedit>
 <ngx-syntaxedit
   [ngClass]="{ error: _editingControllerSyntaxError }"
   [syntax]="_editingControllerSyntax"
   [highlight]="'js'"
+  [wrap]="false"
+  [numbers]="false"
   (syntaxChange)="_updateEditingControllerSyntax($event)"
 ></ngx-syntaxedit>
 <ngx-syntaxedit
   [ngClass]="{ error: _editingStyleSyntaxError }"
   [syntax]="_editingStyleSyntax"
   [highlight]="'css'"
+  [wrap]="false"
+  [numbers]="false"
   (syntaxChange)="_updateEditingStyleSyntax($event)"
 ></ngx-syntaxedit>
 <button (click)="_resetEditingSyntax()">Reset</button>

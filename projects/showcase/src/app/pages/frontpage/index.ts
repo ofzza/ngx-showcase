@@ -9,6 +9,6 @@ import { Component } from '@angular/core';
  */
 @Component({
   templateUrl: 'index.html',
-  styles: ['style.scss'],
+  styleUrls: ['style.scss'],
 })
 export class FrontpageComponent {}

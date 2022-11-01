@@ -1,3 +1,9 @@
+<h1>Example</h1>
+
+<div [innerHTML]="'docs/example.md' | fetchAsync | async | markdownAsync | async"></div>
+
+<hr />
+
 <ngx-showcase
   [html]="'docs/example/index.html' | fetchAsync | async"
   [controller]="'docs/example/index.js' | fetchAsync | async"

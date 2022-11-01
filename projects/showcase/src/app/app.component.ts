@@ -6,19 +6,19 @@ import { Component } from '@angular/core';
 import { routes, MarkdownService, HighlightService } from '../../../ngx-showcase/src/public-api';
 
 // Import highlight.js languages
-import * as xml from 'highlight.js/lib/languages/xml';
-import * as javascript from 'highlight.js/lib/languages/javascript';
-import * as css from 'highlight.js/lib/languages/css';
+import xml from 'highlight.js/lib/languages/xml';
+import javascript from 'highlight.js/lib/languages/javascript';
+import css from 'highlight.js/lib/languages/css';
 
 // Register markdown web-worker
 MarkdownService.registerWorker(() => {
-  return new Worker('../workers/markdown.worker', {
+  return new Worker(new URL('../workers/markdown.worker', import.meta.url), {
     type: 'module',
   });
 });
 // Register highlighting web-worker
 HighlightService.registerWorker(() => {
-  return new Worker('../workers/highlight.worker', {
+  return new Worker(new URL('../workers/highlight.worker', import.meta.url), {
     type: 'module',
   });
 });

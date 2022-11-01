@@ -93,7 +93,7 @@ export class ShowcaseComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    * Subject used for debounce-ing the render (on detected changes) procedure
    */
-  private _debouncedRenderSubject?: Subject<any>;
+  private _debouncedRenderSubject?: Subject<void>;
 
   /**
    * Handles HTML editing syntax change
@@ -176,13 +176,13 @@ export class ShowcaseComponent implements OnInit, AfterViewInit, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges) {
     // Update editing syntax if not previously edited
-    if (changes.html && changes.html.previousValue === this._editingHtmlSyntax) {
+    if (changes.html && changes.html.previousValue !== this._editingHtmlSyntax) {
       this._updateEditingHtmlSyntax(changes.html.currentValue);
     }
-    if (changes.controller && changes.controller.previousValue === this._editingControllerSyntax) {
+    if (changes.controller && changes.controller.previousValue !== this._editingControllerSyntax) {
       this._updateEditingControllerSyntax(changes.controller.currentValue);
     }
-    if (changes.style && changes.style.previousValue === this._editingStyleSyntax) {
+    if (changes.style && changes.style.previousValue !== this._editingStyleSyntax) {
       this._updateEditingStyleSyntax(changes.style.currentValue);
     }
   }
@@ -194,7 +194,7 @@ export class ShowcaseComponent implements OnInit, AfterViewInit, OnChanges {
     // In debounced subject not initialized, initialize subject and trigger render
     if (!this._debouncedRenderSubject) {
       // Initialize debounced subject
-      this._debouncedRenderSubject = new Subject<any>();
+      this._debouncedRenderSubject = new Subject<void>();
       this._debouncedRenderSubject.pipe(debounceTime(this.debounce)).subscribe(() => {
         this._doRender();
       });

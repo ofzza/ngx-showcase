@@ -61,7 +61,7 @@ export class ComponentCompiler {
             // Try evaluating the controller
             try {
               new Function(controller).bind(this)();
-            } catch (err) {
+            } catch (err: any) {
               reject(new ComponentCompilerControllerError(err));
             }
           }
@@ -97,12 +97,12 @@ export class ComponentCompiler {
 
               // Resolve compilation done
               resolve();
-            } catch (err) {
+            } catch (err: any) {
               reject(new ComponentCompilerHtmlError(err));
             }
           }
         });
-      } catch (err) {
+      } catch (err: any) {
         reject(new ComponentCompilerHtmlError(err));
       }
     });
