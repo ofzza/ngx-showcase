@@ -5,9 +5,12 @@
 import { Route, ShowcaseBasedRouting, ShowcaseArtifactTypes } from '../services';
 
 // Import components
-import { SyntaxAreaComponent, SyntaxAreaComponentShowcase } from '../components';
-import { SyntaxEditComponent, SyntaxEditComponentShowcase } from '../components';
-import { ShowcaseComponent, ShowcaseComponentShowcase } from '../components';
+import { SyntaxAreaComponent } from '../components';
+import { SyntaxAreaComponentShowcase } from './ngx-showcase-app.module';
+import { SyntaxEditComponent } from '../components';
+import { SyntaxEditComponentShowcase } from './ngx-showcase-app.module';
+import { ShowcaseComponent } from '../components';
+import { ShowcaseComponentShowcase } from './ngx-showcase-app.module';
 
 // Import pipes
 import { ExtractInnerSyntaxPipe, ExtractInnerSyntaxPipeShowcase } from '../pipes';

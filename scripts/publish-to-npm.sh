@@ -1,20 +1,28 @@
 #!/bin/bash
-cd "$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)";
+DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)";
+cd $DIR
 
 # Exit when any command fails
 set -e
+function cleanup {
+  set +e
+}
+trap cleanup EXIT
 
 # Build library version
+echo '';
 echo '> Building latest library version ...';
-ng build --prod
-cp -f ../README.md ../dist;
-cp -f ../LICENSE ../dist;
-cp -f ../package.json ../dist;
+ng build --project ngx-showcase --configuration production && ng build --project showcase --configuration production
+bash ./build-docs.sh
 
-# Running tests
 echo '';
 echo '> Running tests...';
 npx jasmine ../package.spec.ts
+
+echo '';
+echo '> Publishing resources...';
+cp -f ../README.md ../dist/ngx-showcase;
+cp -f ../LICENSE ../dist/ngx-showcase;
 
 # Check if main project package.json and library package.json are have same property values
 echo '';
@@ -53,5 +61,6 @@ if [ "${repDescription}" != "${libDescription}" ]; then
 fi
 
 # Publish via NPM
-cd ../dist/ngx-showcase
-npm publish
+echo '';
+echo '> Publishing to NPM ...';
+(cd $DIR/../dist/ngx-showcase; npm publish --access public)

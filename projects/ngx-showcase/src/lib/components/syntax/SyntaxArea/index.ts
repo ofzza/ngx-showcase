@@ -20,7 +20,7 @@ import {
 } from '@angular/core';
 
 // (Re)export showcase component
-export * from './_showcase';
+// export * from './_showcase';
 
 /**
  * Render perameters

@@ -1,9 +1,16 @@
 {
-  "name": "ngx-showcase",
-  "version": "0.0.1-alpha-1",
+  "name": "@ofzza/ngx-showcase",
+  "version": "0.0.1-alpha-5",
+  "description": "Angular library meant for quickly building a showcase web application for your own libraries",
   "peerDependencies": {
+    "@angular/cdk": "^14.2.6",
     "@angular/common": "^14.2.8",
-    "@angular/core": "^14.2.8"
+    "@angular/core": "^14.2.8",
+    "@types/highlight.js": "^10.1.0",
+    "@types/markdown-it": "^12.2.3",
+    "bootstrap": "^5.2.2",
+    "highlight.js": "^11.6.0",
+    "markdown-it": "^13.0.1"
   },
   "dependencies": {
     "tslib": "^2.4.1"

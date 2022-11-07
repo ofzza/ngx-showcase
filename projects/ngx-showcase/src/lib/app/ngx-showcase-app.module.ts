@@ -15,7 +15,11 @@ export * from './routes';
 // Import and (re)export components
 export * from './components';
 import { AppMenuComponent } from './components';
-const components = [AppMenuComponent];
+import { SyntaxAreaComponentShowcase } from '../components/syntax/SyntaxArea/_showcase';
+import { SyntaxEditComponentShowcase } from '../components/syntax/SyntaxEdit/_showcase';
+import { ShowcaseComponentShowcase } from '../components/demo/Showcase/_showcase';
+export { SyntaxAreaComponentShowcase, SyntaxEditComponentShowcase, ShowcaseComponentShowcase };
+const components = [AppMenuComponent, SyntaxAreaComponentShowcase, SyntaxEditComponentShowcase, ShowcaseComponentShowcase];
 
 /**
  * Showcasing application module

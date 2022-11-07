@@ -9,17 +9,10 @@ const modules = [CommonModule, HttpClientModule];
 
 // Import and (re)export child components
 export * from './components';
-import { SyntaxAreaComponent, SyntaxAreaComponentShowcase } from './components';
-import { SyntaxEditComponent, SyntaxEditComponentShowcase } from './components';
-import { ShowcaseComponent, ShowcaseComponentShowcase } from './components';
-const components = [
-  SyntaxAreaComponent,
-  SyntaxAreaComponentShowcase,
-  SyntaxEditComponent,
-  SyntaxEditComponentShowcase,
-  ShowcaseComponent,
-  ShowcaseComponentShowcase,
-];
+import { SyntaxAreaComponent } from './components';
+import { SyntaxEditComponent } from './components';
+import { ShowcaseComponent } from './components';
+const components = [SyntaxAreaComponent, SyntaxEditComponent, ShowcaseComponent];
 
 // Import and (re)export pipes
 export * from './pipes';
