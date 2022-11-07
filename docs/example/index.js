@@ -1,3 +1,0 @@
-this.doThing = () => {
-  alert('Thing!');
-};

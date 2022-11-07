@@ -70,8 +70,8 @@
               },
               {
                 "glob": "**",
-                "input": "./docs",
-                "output": "/docs"
+                "input": "./readme",
+                "output": "/readme"
               }
             ],
             "styles": ["projects/showcase/src/styles.scss"],

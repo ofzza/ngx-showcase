@@ -8,7 +8,7 @@ import { HighlightService } from '../Highlight';
 /**
  * MarkdownIt instance
  */
-const _markdownit = new MarkdownIt();
+// const _markdownit = new MarkdownIt();
 
 /**
  * MarkdownIt options type
@@ -49,6 +49,7 @@ const defaultOptions: TMarkdownOptions = {
  * @param highlight (Optional) Instance of the Highlighting service
  */
 export function render(syntax: string, options?: TMarkdownOptions, highlight?: HighlightService) {
+  const _markdownit = new MarkdownIt();
   // Set options
   const margedOptions = {
     // Default options

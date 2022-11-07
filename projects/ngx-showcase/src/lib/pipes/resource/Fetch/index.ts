@@ -1,6 +1,11 @@
 // Fetch resource pipe, Fetches a remote resource from a URL
 // ----------------------------------------------------------------------------
 
+// TODO:
+// - [] Cache already loaded resources and resources already in process of
+//   being loaded
+// ----------------------------------------------------------------------------
+
 // Import dependencies
 import { Observable } from 'rxjs';
 import { Pipe } from '@angular/core';
