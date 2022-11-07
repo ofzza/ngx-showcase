@@ -1,3 +1,7 @@
+# DevOps
+
+- [ ] Implement commit hooked check for versioning of main and library package.json files and all the dependencies within them
+
 # Pipes
 
 - [x] Implement an `String` pipe
