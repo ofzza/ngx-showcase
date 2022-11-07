@@ -54,4 +54,4 @@ fi
 
 # Publish via NPM
 cd ../dist/ngx-showcase
-# npm publish
+npm publish

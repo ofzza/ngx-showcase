@@ -1,6 +1,6 @@
 {
   "name": "ngx-showcase",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha-1",
   "scripts": {
     "build": "bash ./scripts/build-docs.sh",
     "test": "ng test",
@@ -10,7 +10,7 @@
   "pre-commit": [
     "build"
   ],
-  "dependencies": {
+  "peerDependencies": {
     "@angular/animations": "^14.2.8",
     "@angular/cdk": "^14.2.6",
     "@angular/common": "^14.2.8",
@@ -21,13 +21,11 @@
     "@angular/platform-browser-dynamic": "^14.2.8",
     "@angular/router": "^14.2.8",
     "bootstrap": "^5.2.2",
+    "highlight.js": "^11.6.0",
+    "markdown-it": "^13.0.1",
     "rxjs": "^7.5.7",
     "tslib": "^2.4.1",
     "zone.js": "~0.11.4"
-  },
-  "peerDependencies": {
-    "highlight.js": "^11.6.0",
-    "markdown-it": "^13.0.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.7",
