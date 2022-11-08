@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 import { routes, MarkdownService, HighlightService } from '../../../ngx-showcase/src/public-api';
 
 // Import highlight.js languages
+import 'highlight.js';
 import xml from 'highlight.js/lib/languages/xml';
 import javascript from 'highlight.js/lib/languages/javascript';
 import css from 'highlight.js/lib/languages/css';
