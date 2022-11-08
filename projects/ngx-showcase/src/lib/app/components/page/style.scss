@@ -1,11 +1,29 @@
+// Page component isolated styling
 :host {
   display: flex;
   flex-direction: column;
 
   header {
     z-index: 1;
+    display: flex;
+    flex-direction: row;
     height: 56px !important;
     padding: 8px 16px !important;
+    color: white;
+
+    * {
+      &:not(:first-child) {
+        margin-left: 8px;
+        font-size: 0.8rem;
+        color: gray;
+        i {
+          color: white;
+        }
+      }
+      &:first-child {
+        flex: 1;
+      }
+    }
   }
 
   content {
@@ -13,6 +31,9 @@
     display: flex;
     width: 100%;
     margin-top: 56px;
+
+    // @include media-breakpoint-up(md) {
+    // }
 
     nav {
       padding: 8pt;

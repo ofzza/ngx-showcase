@@ -24,12 +24,6 @@ export class AppMenuComponent {
   public routes: Route[] = [];
 
   /**
-   * Holds page group's title
-   */
-  @Input()
-  public title = 'Showcase';
-
-  /**
    * Main menu links tree control
    */
   public _tree = new NestedTreeControl<Route>(node => node.childRoutes);

@@ -1,6 +1,6 @@
 {
   "name": "@ofzza/ngx-showcase",
-  "version": "0.0.1-alpha-10",
+  "version": "0.0.1-alpha-12",
   "description": "Angular library meant for quickly building a showcase web application for your own libraries",
   "private": false,
   "scripts": {
@@ -12,6 +12,17 @@
   "pre-commit": [
     "build"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ofzza/ngx-showcase.git"
+  },
+  "keywords": [
+    "library",
+    "demo",
+    "showcase"
+  ],
+  "author": "ofzza",
+  "license": "MIT",
   "dependencies": {
     "@angular/animations": "^14.2.8",
     "@angular/cdk": "^14.2.6",

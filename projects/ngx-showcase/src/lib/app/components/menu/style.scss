@@ -33,14 +33,19 @@
     color: white;
     cursor: pointer;
 
-    .menu-tree-node {
+    .menu-tree-node.menu-tree-node-group {
       margin-left: 15px;
     }
 
     & > a {
       width: auto !important;
-      & > span::before {
+      &.active {
+        text-decoration: none;
+      }
+      & > span::before,
+      & > span::after {
         white-space: pre;
+        color: gray;
       }
     }
     &:not(.menu-tree-node-expanded):not(.menu-tree-node-collapsed) > a > span::before {
@@ -51,6 +56,13 @@
     }
     &.menu-tree-node-collapsed > a > span::before {
       content: '[+]';
+    }
+
+    &:not(.menu-tree-node-group) > a.active > span::before {
+      content: '>>>';
+    }
+    &:not(.menu-tree-node-group) > a.active > span::after {
+      content: '<<<';
     }
   }
 }

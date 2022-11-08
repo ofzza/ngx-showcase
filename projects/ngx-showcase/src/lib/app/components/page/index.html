@@ -1,6 +1,15 @@
 <!-- Header -->
 <header class="navbar navbar-expand navbar-dark bg-dark fixed-top">
   <a class="navbar-brand mr-1" [routerLink]="'/'">{{title}}</a>
+  <span *ngIf="_packageJson">
+    <span *ngIf="_packageJson.version">Version <i>{{_packageJson.version}}</i></span>
+    <span *ngIf="_packageJson.author">by <i>{{_packageJson.author}}</i></span>
+    <span *ngIf="_packageJson.repository && _packageJson.repository.url && _packageJson.repository.type === 'git'">
+      <a [href]="_packageJson.repository.url.replace('git+', '').replace('.git', '')" target="_blank">
+        <img src="https://github.githubassets.com/images/modules/site/icons/footer/github-mark.svg" />
+      </a>
+    </span>
+  </span>
 </header>
 
 <!-- Showcase -->

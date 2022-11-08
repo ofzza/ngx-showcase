@@ -18,3 +18,6 @@ ng build --project ngx-showcase --configuration production && ng build --project
 
 # Rebuild docs
 cp $DIR/../docs/index.html $DIR/../docs/404.html
+
+# Stage added docs
+git add $DIR/../docs
