@@ -1,42 +1,50 @@
 // Menu contents
-h5 {
-  color: white;
-  white-space: nowrap;
-}
-a {
-  padding: 4px 16px;
-  white-space: nowrap;
-  text-decoration: none;
-  &,
-  & > * {
-    font-size: 12px;
-  }
-  &.active {
-    text-decoration: underline;
-  }
-  &:hover {
-    font-weight: bold;
-  }
-}
-
-.menu-tree-invisible {
-  display: none;
-}
-
-.menu-tree-node {
-  position: relative;
+:host {
   display: block;
+  min-width: min(100vw, 320px);
 
-  &.menu-tree-node-group {
-    margin-left: 15px;
+  h5 {
     color: white;
+    white-space: nowrap;
+  }
+  a {
+    padding: 4px 0px;
+    white-space: nowrap;
+    text-decoration: none;
+    &,
+    & > * {
+      font-size: 12px;
+    }
+    &.active {
+      text-decoration: underline;
+    }
+    &:hover {
+      font-weight: bold;
+    }
+  }
+
+  .menu-tree-invisible {
+    display: none;
+  }
+
+  .menu-tree-node {
+    position: relative;
+    display: block;
+    color: white;
+    cursor: pointer;
+
+    .menu-tree-node {
+      margin-left: 15px;
+    }
+
     & > a {
       width: auto !important;
       & > span::before {
-        position: absolute;
-        top: 0;
-        left: -10px;
+        white-space: pre;
       }
+    }
+    &:not(.menu-tree-node-expanded):not(.menu-tree-node-collapsed) > a > span::before {
+      content: '   ';
     }
     &.menu-tree-node-expanded > a > span::before {
       content: '[-]';

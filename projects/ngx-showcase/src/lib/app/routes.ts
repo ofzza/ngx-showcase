@@ -29,57 +29,73 @@ import { HighlightService, HighlightServiceShowcase } from '../services';
  * Showcase pages' routes
  */
 export const routes = [
-  // Components and directives
-  // new Route('Components and Directives', 'components', undefined, {}, undefined, [
-  //   // Syntax processing pipes
-  //   new Route('Syntax processing', 'syntax', undefined, {}, undefined, [
-  //     // Syntax area component
-  //     ShowcaseBasedRouting.createRouteFromArtifact(SyntaxAreaComponent, ShowcaseArtifactTypes.Component, SyntaxAreaComponentShowcase),
-  //     // Syntax edit component
-  //     ShowcaseBasedRouting.createRouteFromArtifact(SyntaxEditComponent, ShowcaseArtifactTypes.Component, SyntaxEditComponentShowcase),
-  //   ]),
-  //   // Syntax processing pipes
-  //   new Route('Demoing', 'demo', undefined, {}, undefined, [
-  //     // Showcase component
-  //     ShowcaseBasedRouting.createRouteFromArtifact(ShowcaseComponent, ShowcaseArtifactTypes.Component, ShowcaseComponentShowcase),
-  //   ]),
-  // ]),
-  // Pipes
-  new Route('Pipes', 'pipes', undefined, {}, undefined, [
-    // Syntax processing pipes
-    new Route('Syntax processing', 'syntax', undefined, {}, undefined, [
-      // Extract inner syntax pipe
-      ShowcaseBasedRouting.createRouteFromArtifact(ExtractInnerSyntaxPipe, ShowcaseArtifactTypes.Pipe, ExtractInnerSyntaxPipeShowcase),
-      // Fetch resource pipe
-      ShowcaseBasedRouting.createRouteFromArtifact(FetchPipe, ShowcaseArtifactTypes.Pipe, FetchPipeShowcase),
-      // String manipulation pipe
-      ShowcaseBasedRouting.createRouteFromArtifact(StringPipe, ShowcaseArtifactTypes.Pipe, StringPipeShowcase),
-      // Markdown pipe
-      ShowcaseBasedRouting.createRouteFromArtifact(MarkdownPipe, ShowcaseArtifactTypes.Pipe, MarkdownPipeShowcase),
-      ShowcaseBasedRouting.createRouteFromArtifact(MarkdownAsyncPipe, ShowcaseArtifactTypes.Pipe, MarkdownPipeShowcase),
-      // Highlight pipe
-      ShowcaseBasedRouting.createRouteFromArtifact(HighlightPipe, ShowcaseArtifactTypes.Pipe, HighlightPipeShowcase),
-      ShowcaseBasedRouting.createRouteFromArtifact(HighlightAsyncPipe, ShowcaseArtifactTypes.Pipe, HighlightPipeShowcase),
-    ]),
+  // Building a showcase application for your library
+  new Route('Getting started', 'getting-started', undefined, {}, undefined, [
+    // Creating a showcase application
+    // Adding ngx-showcase into your showcase application
+    // - Add NPM package
+    // - Add application UI
+    // - Add menu items and routes to relevant targets
+    // - Configure angular to share resources to be consumed by the showcase
+    // Optional advanced integration
+    // - Configure syntax highlighting languages
+    // - Add your own syntax highlighting languages
+    // - Configure workers syntax processing services and pipes
   ]),
-  // Services
-  new Route('Services', 'services', undefined, {}, undefined, [
-    // Syntax processing services
-    // new Route('Runtime compilation', 'compilation', undefined, {}, undefined, [
-    //   // Compile service
-    //   ShowcaseBasedRouting.createRouteFromArtifact(CompileService, ShowcaseArtifactTypes.Service, CompileServiceShowcase),
+  // Utilities to help you write your showcase pages
+  new Route('Utilities', 'utilities', undefined, {}, undefined, [
+    // Components and directives
+    // new Route('Components and Directives', 'components', undefined, {}, undefined, [
+    //   // Syntax processing pipes
+    //   new Route('Syntax processing', 'syntax', undefined, {}, undefined, [
+    //     // Syntax area component
+    //     ShowcaseBasedRouting.createRouteFromArtifact(SyntaxAreaComponent, ShowcaseArtifactTypes.Component, SyntaxAreaComponentShowcase),
+    //     // Syntax edit component
+    //     ShowcaseBasedRouting.createRouteFromArtifact(SyntaxEditComponent, ShowcaseArtifactTypes.Component, SyntaxEditComponentShowcase),
+    //   ]),
+    //   // Syntax processing pipes
+    //   new Route('Demoing', 'demo', undefined, {}, undefined, [
+    //     // Showcase component
+    //     ShowcaseBasedRouting.createRouteFromArtifact(ShowcaseComponent, ShowcaseArtifactTypes.Component, ShowcaseComponentShowcase),
+    //   ]),
     // ]),
-    // Syntax processing services
-    new Route('Resource processing', 'resource', undefined, {}, undefined, [
-      // String manipulation service
-      ShowcaseBasedRouting.createRouteFromArtifact(StringService, ShowcaseArtifactTypes.Service, StringServiceShowcase),
+    // Pipes
+    new Route('Pipes', 'pipes', undefined, {}, undefined, [
+      // Syntax processing pipes
+      new Route('Syntax processing', 'syntax', undefined, {}, undefined, [
+        // Extract inner syntax pipe
+        ShowcaseBasedRouting.createRouteFromArtifact(ExtractInnerSyntaxPipe, ShowcaseArtifactTypes.Pipe, ExtractInnerSyntaxPipeShowcase),
+        // Fetch resource pipe
+        ShowcaseBasedRouting.createRouteFromArtifact(FetchPipe, ShowcaseArtifactTypes.Pipe, FetchPipeShowcase),
+        // String manipulation pipe
+        ShowcaseBasedRouting.createRouteFromArtifact(StringPipe, ShowcaseArtifactTypes.Pipe, StringPipeShowcase),
+        // Markdown pipe
+        ShowcaseBasedRouting.createRouteFromArtifact(MarkdownPipe, ShowcaseArtifactTypes.Pipe, MarkdownPipeShowcase),
+        ShowcaseBasedRouting.createRouteFromArtifact(MarkdownAsyncPipe, ShowcaseArtifactTypes.Pipe, MarkdownPipeShowcase),
+        // Highlight pipe
+        ShowcaseBasedRouting.createRouteFromArtifact(HighlightPipe, ShowcaseArtifactTypes.Pipe, HighlightPipeShowcase),
+        ShowcaseBasedRouting.createRouteFromArtifact(HighlightAsyncPipe, ShowcaseArtifactTypes.Pipe, HighlightPipeShowcase),
+      ]),
     ]),
-    // Syntax processing services
-    new Route('Syntax processing', 'syntax', undefined, {}, undefined, [
-      // Markdown service
-      ShowcaseBasedRouting.createRouteFromArtifact(MarkdownService, ShowcaseArtifactTypes.Service, MarkdownServiceShowcase),
-      // Highlight service
-      ShowcaseBasedRouting.createRouteFromArtifact(HighlightService, ShowcaseArtifactTypes.Service, HighlightServiceShowcase),
+    // Services
+    new Route('Services', 'services', undefined, {}, undefined, [
+      // Syntax processing services
+      // new Route('Runtime compilation', 'compilation', undefined, {}, undefined, [
+      //   // Compile service
+      //   ShowcaseBasedRouting.createRouteFromArtifact(CompileService, ShowcaseArtifactTypes.Service, CompileServiceShowcase),
+      // ]),
+      // Syntax processing services
+      new Route('Resource processing', 'resource', undefined, {}, undefined, [
+        // String manipulation service
+        ShowcaseBasedRouting.createRouteFromArtifact(StringService, ShowcaseArtifactTypes.Service, StringServiceShowcase),
+      ]),
+      // Syntax processing services
+      new Route('Syntax processing', 'syntax', undefined, {}, undefined, [
+        // Markdown service
+        ShowcaseBasedRouting.createRouteFromArtifact(MarkdownService, ShowcaseArtifactTypes.Service, MarkdownServiceShowcase),
+        // Highlight service
+        ShowcaseBasedRouting.createRouteFromArtifact(HighlightService, ShowcaseArtifactTypes.Service, HighlightServiceShowcase),
+      ]),
     ]),
   ]),
 ];

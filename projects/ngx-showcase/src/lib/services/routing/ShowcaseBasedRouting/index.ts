@@ -11,13 +11,16 @@ import { Route } from '../Route';
  * Types of artifacts which can be represented by routes
  */
 export enum ShowcaseArtifactTypes {
-  Module = 'Module',
+  // Module = 'Module',
   Component = 'Component',
   Directive = 'Directive',
   Pipe = 'Pipe',
-  Injectable = 'Injectable',
+  // Injectable = 'Injectable',
   Service = 'Service',
-  Model = 'Model',
+  // Model = 'Model',
+  class = 'class',
+  function = 'function',
+  custom = 'custom',
 }
 
 /**
@@ -34,6 +37,30 @@ export class ShowcaseBasedRouting {
    * @param childRoutes Child routes Child routes nested within created route
    */
   public static createRouteFromArtifact(
+    artifact: new (...args: any[]) => any,
+    artifactType: ShowcaseArtifactTypes.Component | ShowcaseArtifactTypes.Component | ShowcaseArtifactTypes.Pipe | ShowcaseArtifactTypes.Service,
+    showcaseComponent: undefined | any,
+    childRoutes?: Route[],
+  ): Route;
+  public static createRouteFromArtifact(
+    artifact: new (...args: any[]) => any,
+    artifactType: ShowcaseArtifactTypes.class,
+    showcaseComponent: undefined | any,
+    childRoutes?: Route[],
+  ): Route;
+  public static createRouteFromArtifact(
+    artifact: (...args: any[]) => any,
+    artifactType: ShowcaseArtifactTypes.function,
+    showcaseComponent: undefined | any,
+    childRoutes?: Route[],
+  ): Route;
+  public static createRouteFromArtifact(
+    artifact: string,
+    artifactType: ShowcaseArtifactTypes.custom,
+    showcaseComponent: undefined | any,
+    childRoutes?: Route[],
+  ): Route;
+  public static createRouteFromArtifact(
     artifact: any,
     artifactType: ShowcaseArtifactTypes,
     showcaseComponent: undefined | any,
@@ -46,6 +73,11 @@ export class ShowcaseBasedRouting {
       relativePath = artifact.name.replace(/component/gi, '');
       title = `<${artifact?.ɵcmp?.selectors?.[0]?.[0] || `${relativePath}`} />`;
     }
+    // Extract directive path and title
+    else if (artifactType === ShowcaseArtifactTypes.Directive) {
+      relativePath = artifact.name.replace(/directive/gi, '');
+      title = `<${artifact?.ɵcmp?.selectors?.[0]?.[0] || `${relativePath}`} />`;
+    }
     // Extract pipe path and title
     else if (artifactType === ShowcaseArtifactTypes.Pipe) {
       relativePath = artifact.name.toLowerCase().replace(/pipe/gi, '');
@@ -54,7 +86,22 @@ export class ShowcaseBasedRouting {
     // Extract service path and title
     else if (artifactType === ShowcaseArtifactTypes.Service) {
       relativePath = artifact.name.toLowerCase().replace(/service/gi, '');
-      title = `${artifact.name.replace(/pipe/gi, '')}`;
+      title = `${artifact.name.replace(/service/gi, '')}`;
+    }
+    // Extract class path and title
+    else if (artifactType === ShowcaseArtifactTypes.class && typeof artifact === 'function') {
+      relativePath = artifact.name.toLowerCase();
+      title = `${artifact.name}`;
+    }
+    // Extract function path and title
+    else if (artifactType === ShowcaseArtifactTypes.function && typeof artifact === 'function') {
+      relativePath = artifact.name.toLowerCase();
+      title = `${artifact.name}`;
+    }
+    // Extract custom path and title
+    else if (artifactType === ShowcaseArtifactTypes.custom && typeof artifact === 'string') {
+      relativePath = artifact.toLowerCase().replace(/\s/g, '-');
+      title = `${artifact}`;
     }
     // Artifact type not supported
     else {
