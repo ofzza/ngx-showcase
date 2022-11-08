@@ -1,13 +1,13 @@
 <!-- Header -->
 <header class="navbar navbar-expand navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand mr-1" [routerLink]="'/'">NGX SHOWCASE</a>
+  <a class="navbar-brand mr-1" [routerLink]="'/'">{{title}}</a>
 </header>
 
 <!-- Showcase -->
 <content>
   <!-- Showcase menu -->
   <nav class="navbar-dark bg-dark">
-    <ngx-showcase-app-menu [routes]="_routes"></ngx-showcase-app-menu>
+    <ngx-showcase-app-menu [routes]="routes"></ngx-showcase-app-menu>
   </nav>
   <!-- Router outlet -->
   <main>

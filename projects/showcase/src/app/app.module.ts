@@ -1,4 +1,4 @@
-// Main ngx-showcase app's application module
+// Main ngx-showcase showcase app's application module
 // ----------------------------------------------------------------------------
 
 // Import modules

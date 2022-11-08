@@ -27,7 +27,7 @@ export class AppMenuComponent {
    * Holds page group's title
    */
   @Input()
-  public title = '';
+  public title = 'Showcase';
 
   /**
    * Main menu links tree control
