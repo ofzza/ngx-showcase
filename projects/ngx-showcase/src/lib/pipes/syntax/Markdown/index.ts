@@ -7,9 +7,6 @@ import { map } from 'rxjs/operators';
 import { Pipe } from '@angular/core';
 import { MarkdownService, TMarkdownOptions, WorkerInvocationResponse } from '../../../services';
 
-// (Re)export showcase component
-export * from './_showcase';
-
 /**
  * Markdown pipe, Converts markdown syntax into HTML
  */

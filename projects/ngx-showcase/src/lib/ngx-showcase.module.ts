@@ -8,10 +8,10 @@ import { HttpClientModule } from '@angular/common/http';
 const modules = [CommonModule, HttpClientModule];
 
 // Import and (re)export child components
-export * from './components';
 import { SyntaxAreaComponent } from './components';
 import { SyntaxEditComponent } from './components';
 import { ShowcaseComponent } from './components';
+export * from './components';
 const components = [SyntaxAreaComponent, SyntaxEditComponent, ShowcaseComponent];
 
 // Import and (re)export pipes
@@ -30,14 +30,14 @@ import { FetchService } from './services';
 import { StringService } from './services';
 import { MarkdownService } from './services';
 import { HighlightService } from './services';
-const injectables = [CompileService, FetchService, StringService, MarkdownService, HighlightService];
+const providers = [CompileService, FetchService, StringService, MarkdownService, HighlightService];
 
 /**
  * Main ngx-showcase library module
  */
 @NgModule({
   declarations: [...components, ...pipes],
-  providers: [...injectables],
+  providers: [...providers],
   imports: [...modules],
   exports: [...modules, ...components, ...pipes],
 })

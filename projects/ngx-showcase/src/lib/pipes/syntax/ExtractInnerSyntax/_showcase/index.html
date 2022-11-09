@@ -1,1 +1,2 @@
-TODO: ExtractInnerSyntax Pipe
+<h1>Syntax Extraction Pipe</h1>
+<div [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---extractpipe.start-->', '<!---extractpipe.end-->']}, 'trim'] | markdown"></div>

@@ -1,1 +1,2 @@
-TODO: Fetch resource Pipe
+<h1>Fetch Resources Pipe</h1>
+<div [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---fetchpipe.start-->', '<!---fetchpipe.end-->']}, 'trim'] | markdown"></div>

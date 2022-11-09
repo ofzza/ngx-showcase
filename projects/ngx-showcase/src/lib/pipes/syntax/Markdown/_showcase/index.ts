@@ -11,4 +11,4 @@ import { Component } from '@angular/core';
   templateUrl: './index.html',
   styleUrls: ['./style.scss'],
 })
-export class HighlightPipeShowcase {}
+export class MarkdownPipeShowcase {}

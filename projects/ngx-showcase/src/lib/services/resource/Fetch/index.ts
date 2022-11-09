@@ -6,9 +6,6 @@ import { lastValueFrom } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-// (Re)export showcase component
-export * from './_showcase';
-
 /**
  * Fetch service, fetches a resource respecting the base[href]
  */

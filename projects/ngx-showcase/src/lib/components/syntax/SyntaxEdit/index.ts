@@ -6,9 +6,6 @@ import { Component, OnChanges, AfterViewChecked, SimpleChanges, Input, Output, E
 import { SyntaxAreaComponent } from '../SyntaxArea';
 import { HighlightService } from '../../../services';
 
-// (Re)export showcase component
-// export * from './_showcase';
-
 /**
  * Syntax area component, used to display code/syntax
  */

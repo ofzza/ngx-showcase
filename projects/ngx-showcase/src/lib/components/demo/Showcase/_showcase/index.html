@@ -1,3 +1,10 @@
+<h1>Showcasing Component</h1>
+<div
+  [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---showcasecomponent.start-->', '<!---showcasecomponent.end-->']}, 'trim'] | markdown"
+></div>
+
+---
+
 <h1>Example</h1>
 
 <div [innerHTML]="'docs/example.md' | fetchAsync | async | markdownAsync | async"></div>

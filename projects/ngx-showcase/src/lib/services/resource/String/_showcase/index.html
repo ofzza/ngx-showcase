@@ -1,1 +1,4 @@
-TODO: String Service
+<h1>String Manipulation Service</h1>
+<div
+  [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---stringservice.start-->', '<!---stringservice.end-->']}, 'trim'] | markdown"
+></div>

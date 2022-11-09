@@ -1,1 +1,4 @@
-TODO: Compile Service
+<h1>Syntax Rendering Service</h1>
+<div
+  [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---highlightservice.start-->', '<!---highlightservice.end-->']}, 'trim'] | markdown"
+></div>

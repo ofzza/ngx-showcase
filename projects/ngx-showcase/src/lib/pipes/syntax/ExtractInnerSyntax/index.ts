@@ -5,9 +5,6 @@
 // Import dependencies
 import { Pipe, TemplateRef } from '@angular/core';
 
-// (Re)export showcase component
-export * from './_showcase';
-
 /**
  * Extract inner syntax pipe
  * Extracts unprocessed syntax contained inside an HTML element, ngTemplate, or raw string

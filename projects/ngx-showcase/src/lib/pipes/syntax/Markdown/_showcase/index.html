@@ -1,1 +1,4 @@
-TODO: Highlight Pipe
+<h1>Markdown Rendering Pipe</h1>
+<div
+  [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---markdownpipe.start-->', '<!---markdownpipe.end-->']}, 'trim'] | markdown"
+></div>

@@ -7,9 +7,6 @@ import { map } from 'rxjs/operators';
 import { Pipe } from '@angular/core';
 import { HighlightService, WorkerInvocationResponse } from '../../../services';
 
-// (Re)export showcase component
-export * from './_showcase';
-
 /**
  * Highlight pipe, Converts syntax of a known language into HTML
  */

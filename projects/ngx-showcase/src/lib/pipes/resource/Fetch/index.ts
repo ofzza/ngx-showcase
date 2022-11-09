@@ -11,9 +11,6 @@ import { Observable } from 'rxjs';
 import { Pipe } from '@angular/core';
 import { FetchService } from '../../../services';
 
-// (Re)export showcase component
-export * from './_showcase';
-
 /**
  * Fetch resource pipe, Fetches a remote resource from a URL
  */

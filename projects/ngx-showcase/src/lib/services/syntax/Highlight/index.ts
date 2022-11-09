@@ -10,9 +10,6 @@ import { WorkerInvocationRequest, WorkerInvocationResponse } from '../workers';
 // (Re)export worker
 export * from './worker';
 
-// (Re)export showcase component
-export * from './_showcase';
-
 /**
  * Syntax highlighting service, Highlights syntax of a known language
  */

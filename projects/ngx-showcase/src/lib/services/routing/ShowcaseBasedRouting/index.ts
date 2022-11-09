@@ -83,7 +83,7 @@ export class ShowcaseBasedRouting {
     }
     // Extract pipe path and title
     else if (artifactType === ShowcaseArtifactTypes.Pipe) {
-      const ngSelector = artifact?.ɵpipe?.selectors?.[0]?.[0];
+      const ngSelector = artifact?.ɵpipe?.name;
       ShowcaseBasedRouting._checkIfResourceMinimized(ngSelector || artifact.name, artifactType);
       relativePath = ngSelector || artifact.name.toLowerCase().replace(/pipe/gi, '');
       title = `| ${relativePath}`;

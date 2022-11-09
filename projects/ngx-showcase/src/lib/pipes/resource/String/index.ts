@@ -5,9 +5,6 @@
 import { Pipe } from '@angular/core';
 import { StringService } from '../../../services';
 
-// (Re)export showcase component
-export * from './_showcase';
-
 // Configuration types
 type CommandDefinition = keyof StringService | Partial<Record<keyof StringService, any[]>>;
 

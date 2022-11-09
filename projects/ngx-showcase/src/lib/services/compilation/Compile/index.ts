@@ -4,9 +4,6 @@
 // Import dependencies
 import { Injectable, ModuleWithProviders, NgModule, Component, Compiler, Injector, NgModuleRef, ViewContainerRef, ComponentRef } from '@angular/core';
 
-// (Re)export showcase component
-export * from './_showcase';
-
 /**
  * Markdown syntax service, Provides conversion from markdown syntax into HTML syntax
  */

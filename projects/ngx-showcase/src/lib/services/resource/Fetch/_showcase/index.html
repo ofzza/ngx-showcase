@@ -1,1 +1,4 @@
-TODO: Fetch Service
+<h1>Fetch Resources Service</h1>
+<div
+  [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---fetchservice.start-->', '<!---fetchservice.end-->']}, 'trim'] | markdown"
+></div>

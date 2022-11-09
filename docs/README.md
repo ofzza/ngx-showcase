@@ -29,7 +29,27 @@ $ npm install @ofzza/ngx-showcase --save
 If your project is a library you might want to:
 
 - TODO: Describe multi project setup with showcase project and library, and consider building a CLI to create it
-- TODO: Explain how to include required worker files into your project:
+
+- TODO: Explain how to generate routes for pages defined through `ngx-showcase`:
+
+  - `./projects/showcase/src/app/app-routing.module.ts`:
+    ```ts
+    // Routes definition
+    const routes: Routes = [
+      // ...
+      // Generated component pages' routes
+      ...ShowcaseBasedRouting.generateRoutingModuleRoutes([
+        /* ... */
+      ]),
+      // Redirect to default
+      { path: '**', redirectTo: '/' },
+    ];
+    // ...
+    RouterModule.forRoot(routes);
+    // ...
+    ```
+
+- TODO: Explain how to include optional worker files into your project:
 
   - `./projects/showcase/tsconfig.worker.json`:
 
@@ -63,26 +83,145 @@ If your project is a library you might want to:
     });
     ```
 
-- TODO: Explain how to generate routes for pages defined through `ngx-showcase`:
-
-  - `./projects/showcase/src/app/app-routing.module.ts`:
-    ```ts
-    // Routes definition
-    const routes: Routes = [
-      // ...
-      // Generated component pages' routes
-      ...ShowcaseBasedRouting.generateRoutingModuleRoutes([
-        /* ... */
-      ]),
-      // Redirect to default
-      { path: '**', redirectTo: '/' },
-    ];
-    // ...
-    RouterModule.forRoot(routes);
-    // ...
-    ```
-
 <!--gettingstarted.end-->
+
+# Utilities
+
+TODO: ...
+
+## Services
+
+TODO: ...
+
+### Runtime compilation
+
+<!---compilationservice.start-->
+
+TODO: Runtime compilation
+
+<!---compilationservice.end-->
+
+### Resource services
+
+TODO: ...
+
+#### Fetch resource
+
+<!---fetchservice.start-->
+
+TODO: Fetch resource
+
+<!---fetchservice.end-->
+
+#### String manipulation
+
+<!---stringservice.start-->
+
+TODO: String manipulation
+
+<!---stringservice.end-->
+
+### Syntax services
+
+TODO: ...
+
+#### Syntax rendering
+
+<!---highlightservice.start-->
+
+TODO: Syntax rendering
+
+<!---highlightservice.end-->
+
+#### Markdown rendering
+
+<!---markdownservice.start-->
+
+TODO: Markdown rendering
+
+<!---markdownservice.end-->
+
+## Pipes
+
+TODO: ...
+
+### Resource pipes
+
+TODO: ...
+
+#### Fetch resource
+
+<!---fetchpipe.start-->
+
+TODO: Fetch resource
+
+<!---fetchpipe.end-->
+
+#### String manipulation
+
+<!---stringpipe.start-->
+
+TODO: String manipulation
+
+<!---stringpipe.end-->
+
+### Syntax pipes
+
+TODO: ...
+
+#### Syntax extraction
+
+<!---extractpipe.start-->
+
+TODO: Syntax extraction
+
+<!---extractpipe.end-->
+
+#### Syntax rendering
+
+<!---highlightpipe.start-->
+
+TODO: Syntax rendering
+
+<!---highlightpipe.end-->
+
+#### Markdown rendering
+
+<!---markdownpipe.start-->
+
+TODO: Markdown rendering
+
+<!---markdownpipe.end-->
+
+## Components and Directives
+
+### Syntax processing
+
+#### Syntaxarea
+
+<!---syntaxareacomponent.start-->
+
+TODO: &lt;ngx-syntaxarea /&gt;
+
+<!---syntaxareacomponent.end-->
+
+#### Syntaxedit
+
+<!---syntaxeditcomponent.start-->
+
+TODO: &lt;ngx-syntaxedit /&gt;
+
+<!---syntaxeditcomponent.end-->
+
+### Demoing / Showcasing
+
+#### Showcase
+
+<!---showcasecomponent.start-->
+
+TODO: &lt;ngx-showcase /&gt;
+
+<!---showcasecomponent.end-->
 
 # Contrubuting
 

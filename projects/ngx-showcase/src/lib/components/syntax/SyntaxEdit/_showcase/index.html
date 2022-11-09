@@ -1,3 +1,10 @@
+<h1>Syntax Editing Component</h1>
+<div
+  [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---syntaxeditcomponent.start-->', '<!---syntaxeditcomponent.end-->']}, 'trim'] | markdown"
+></div>
+
+---
+
 <ngx-syntaxedit
   [syntax]="'docs/example/index.js' | fetchAsync | async"
   [highlight]="'js'"

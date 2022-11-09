@@ -1,3 +1,10 @@
+<h1>Syntax Viewing Component</h1>
+<div
+  [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---syntaxareacomponent.start-->', '<!---syntaxareacomponent.end-->']}, 'trim'] | markdown"
+></div>
+
+---
+
 <div class="showcase">
   <div>
     <!-- TODO: ... -->

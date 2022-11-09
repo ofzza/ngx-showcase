@@ -12,9 +12,6 @@ import { HighlightService } from '../Highlight';
 export { MarkdownOptions as TMarkdownOptions } from './markdown-it';
 export * from './worker';
 
-// (Re)export showcase component
-export * from './_showcase';
-
 /**
  * Markdown syntax service, Provides conversion from markdown syntax into HTML syntax
  */

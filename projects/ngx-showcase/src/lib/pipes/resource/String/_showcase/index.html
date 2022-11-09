@@ -1,1 +1,2 @@
-TODO: String manipulation Pipe
+<h1>String Manipulation Pipe</h1>
+<div [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---stringpipe.start-->', '<!---stringpipe.end-->']}, 'trim'] | markdown"></div>

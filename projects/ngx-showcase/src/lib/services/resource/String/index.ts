@@ -4,9 +4,6 @@
 // Import dependencies
 import { Injectable } from '@angular/core';
 
-// (Re)export showcase component
-export * from './_showcase';
-
 /**
  * String manipulation service, provides functionality for string processing
  */

@@ -13,7 +13,7 @@
     "declaration": false,
     "downlevelIteration": true,
     "paths": {
-      "@ofzza/ngx-showcase": ["dist/ngx-showcase"]
+      "@ofzza/ngx-showcase": ["./dist/ngx-showcase/"]
     },
     "experimentalDecorators": true,
     "moduleResolution": "node",

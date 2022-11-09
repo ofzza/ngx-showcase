@@ -1,1 +1,4 @@
-TODO: Compile Service
+<h1>Runtime Compilation Service</h1>
+<div
+  [innerHTML]="'/README.md' | fetchAsync | async | string:[{ 'extract': ['<!---compilationservice.start-->', '<!---compilationservice.end-->']}, 'trim'] | markdown"
+></div>
