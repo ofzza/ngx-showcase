@@ -5,6 +5,7 @@
     "baseUrl": "./",
     "outDir": "./dist/showcase",
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
@@ -12,7 +13,7 @@
     "declaration": false,
     "downlevelIteration": true,
     "paths": {
-      "@ofzza/ngx-showcase": ["dist/ngx-showcase/ngx-showcase", "dist/ngx-showcase"]
+      "@ofzza/ngx-showcase": ["dist/ngx-showcase"]
     },
     "experimentalDecorators": true,
     "moduleResolution": "node",

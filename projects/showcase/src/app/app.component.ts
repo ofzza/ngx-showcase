@@ -3,7 +3,7 @@
 
 // Import dependencies
 import { Component } from '@angular/core';
-import { routes, MarkdownService, HighlightService } from '../../../ngx-showcase/src/public-api';
+import { routes, MarkdownService, HighlightService } from '@ofzza/ngx-showcase';
 
 // Import highlight.js languages
 import 'highlight.js';
