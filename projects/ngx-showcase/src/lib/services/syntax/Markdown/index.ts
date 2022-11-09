@@ -4,12 +4,12 @@
 // Import dependencies
 import { Observable, Subscriber, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { TMarkdownOptions, render } from './markdown-it';
-import { TWorkerInvocationRequest, TWorkerInvocationResponse } from '../workers';
+import { MarkdownOptions, render } from './markdown-it';
+import { WorkerInvocationRequest, WorkerInvocationResponse } from '../workers';
 import { HighlightService } from '../Highlight';
 
 // (Re)export types and worker
-export { TMarkdownOptions } from './markdown-it';
+export { MarkdownOptions as TMarkdownOptions } from './markdown-it';
 export * from './worker';
 
 // (Re)export showcase component
@@ -50,7 +50,7 @@ export class MarkdownService {
     number,
     {
       subscriber: Subscriber<string | Error>;
-      monitor?: (res: TWorkerInvocationResponse | Error) => void;
+      monitor?: (res: WorkerInvocationResponse | Error) => void;
     }
   > = {};
 
@@ -75,7 +75,7 @@ export class MarkdownService {
    *  - linkify: Convert URLs to links
    *  - quotes: Replacement quotes
    */
-  public render(syntax?: string | null, options?: TMarkdownOptions): string {
+  public render(syntax?: string | null, options?: MarkdownOptions): string {
     // If no syntax, return not-rendered
     if (!syntax) {
       return syntax || '';
@@ -102,10 +102,10 @@ export class MarkdownService {
    */
   public renderAsync(
     syntax?: string | null,
-    options?: TMarkdownOptions,
+    options?: MarkdownOptions,
     streamPacketSize: number = 0,
     streamPacketDelay: number = 1,
-    streamMonitorCallback?: (res: TWorkerInvocationResponse | Error) => void,
+    streamMonitorCallback?: (res: WorkerInvocationResponse | Error) => void,
   ): Observable<string | Error> {
     // If no syntax, return not-rendered
     if (!syntax) {
@@ -120,7 +120,7 @@ export class MarkdownService {
         this._pendingAsyncQueue[id] = { subscriber, monitor: streamMonitorCallback };
 
         // Post message to web-worker
-        const req: TWorkerInvocationRequest = {
+        const req: WorkerInvocationRequest = {
           id,
           method: 'render',
           args: { syntax, options },
@@ -151,7 +151,7 @@ export class MarkdownService {
    */
   private processAsyncResult(msg: MessageEvent<any>) {
     // Parse received data
-    const res = JSON.parse(msg.data) as TWorkerInvocationResponse;
+    const res = JSON.parse(msg.data) as WorkerInvocationResponse;
 
     // Check if message expected
     if (!this._pendingAsyncQueue[res.id]) {

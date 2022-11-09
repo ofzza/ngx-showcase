@@ -2,10 +2,8 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
-import { lastValueFrom } from 'rxjs';
-import { Component, Input } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Route } from '../../../services';
+import { Component, Input, OnInit } from '@angular/core';
+import { Route, FetchService } from '../../../services';
 
 /**
  * Application page shell component, Creates a menu from routes
@@ -15,7 +13,7 @@ import { Route } from '../../../services';
   templateUrl: './index.html',
   styleUrls: ['../../../styles.scss', './style.scss'],
 })
-export class AppPageComponent {
+export class AppPageComponent implements OnInit {
   /**
    * Holds page group's pages structure and definitions
    */
@@ -38,7 +36,9 @@ export class AppPageComponent {
    */
   public _license!: string;
 
-  constructor(private _http: HttpClient) {
+  constructor(private _fetch: FetchService) {}
+
+  ngOnInit() {
     // Try fetching package.json resource
     this._tryFetchPackageJsonFile();
     this._tryFetchLicenceFile();
@@ -48,13 +48,13 @@ export class AppPageComponent {
    * Attempts to read /package.json
    */
   private async _tryFetchPackageJsonFile() {
-    this._packageJson = await lastValueFrom(this._http.get<string>('/package.json'));
+    this._packageJson = JSON.parse(await (await this._fetch.fetch('/package.json')).text());
   }
 
   /**
    * Attempts to read /LICENSE
    */
   private async _tryFetchLicenceFile() {
-    this._license = await lastValueFrom(this._http.get('/LICENSE', { responseType: 'text' }));
+    this._license = await (await this._fetch.fetch('/LICENSE')).text();
   }
 }

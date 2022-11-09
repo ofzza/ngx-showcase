@@ -3,7 +3,7 @@
 
 // Import dependencies
 import { registerLanguage, render } from './highlight-js';
-import { TWorkerInvocationRequest, TWorkerInvocationResponse } from '../workers';
+import { WorkerInvocationRequest, WorkerInvocationResponse } from '../workers';
 
 // Declare "postMessage", since including webworker tpe definitions causes conflicts
 declare function postMessage(message: any): void;
@@ -15,7 +15,7 @@ export function initializeHighlightServiceWebWorker(): (key: string | string[], 
   // Listen for messages
   addEventListener('message', msg => {
     // Parse received data
-    const data = JSON.parse(msg.data) as TWorkerInvocationRequest;
+    const data = JSON.parse(msg.data) as WorkerInvocationRequest;
 
     // Invoke "render" function and post result bact to main script
     if (data.method === 'render') {
@@ -29,7 +29,7 @@ export function initializeHighlightServiceWebWorker(): (key: string | string[], 
           (function stream(data, result, streamedLength, resultTotalSize) {
             // Post message
             const packet = result.substr(0, data.streamPacketSize),
-              res: TWorkerInvocationResponse = {
+              res: WorkerInvocationResponse = {
                 id: data.id,
                 success: true,
                 result: packet,
@@ -48,12 +48,12 @@ export function initializeHighlightServiceWebWorker(): (key: string | string[], 
         }
         // ...or send in one piece
         else {
-          const res: TWorkerInvocationResponse = { id: data.id, success: true, result, streaming: false };
+          const res: WorkerInvocationResponse = { id: data.id, success: true, result, streaming: false };
           postMessage(JSON.stringify(res));
         }
       } catch (err: any) {
         const errMessage = err.message.toString(),
-          res: TWorkerInvocationResponse = { id: data.id, success: false, result: errMessage, streaming: false };
+          res: WorkerInvocationResponse = { id: data.id, success: false, result: errMessage, streaming: false };
         postMessage(JSON.stringify(res));
       }
     }

@@ -26,10 +26,11 @@ const pipes = [ExtractInnerSyntaxPipe, FetchPipe, StringPipe, HighlightPipe, Hig
 // Import and (re)export injectables
 export * from './services';
 import { CompileService } from './services';
+import { FetchService } from './services';
 import { StringService } from './services';
 import { MarkdownService } from './services';
 import { HighlightService } from './services';
-const injectables = [CompileService, StringService, MarkdownService, HighlightService];
+const injectables = [CompileService, FetchService, StringService, MarkdownService, HighlightService];
 
 /**
  * Main ngx-showcase library module

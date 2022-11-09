@@ -6,14 +6,9 @@ import * as MarkdownIt from 'markdown-it';
 import { HighlightService } from '../Highlight';
 
 /**
- * MarkdownIt instance
- */
-// const _markdownit = new MarkdownIt();
-
-/**
  * MarkdownIt options type
  */
-export type TMarkdownOptions = {
+export type MarkdownOptions = {
   // If syntax should be trimmed before processing
   // ... trimming will remove whitespace and the start and end of syntax
   // ... trimming will remove minimum common indentation whitespace from all lines
@@ -29,7 +24,7 @@ export type TMarkdownOptions = {
 /**
  * Default MarkdownIt options
  */
-const defaultOptions: TMarkdownOptions = {
+const defaultOptions: MarkdownOptions = {
   trim: true,
   breaks: true,
   linkify: false,
@@ -48,7 +43,7 @@ const defaultOptions: TMarkdownOptions = {
  *  - quotes: Replacement quotes
  * @param highlight (Optional) Instance of the Highlighting service
  */
-export function render(syntax: string, options?: TMarkdownOptions, highlight?: HighlightService) {
+export function render(syntax: string, options?: MarkdownOptions, highlight?: HighlightService) {
   const _markdownit = new MarkdownIt();
   // Set options
   const margedOptions = {

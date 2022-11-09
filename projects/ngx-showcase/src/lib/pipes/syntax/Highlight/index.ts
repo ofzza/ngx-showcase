@@ -5,7 +5,7 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Pipe } from '@angular/core';
-import { HighlightService, TWorkerInvocationResponse } from '../../../services';
+import { HighlightService, WorkerInvocationResponse } from '../../../services';
 
 // (Re)export showcase component
 export * from './_showcase';
@@ -48,7 +48,7 @@ export class HighlightAsyncPipe {
     lang?: string,
     streamPacketSize: number = 0,
     streamPacketDelay: number = 1,
-    streamMonitorCallback?: (res: TWorkerInvocationResponse | Error) => void,
+    streamMonitorCallback?: (res: WorkerInvocationResponse | Error) => void,
   ): Observable<string> {
     return (
       this._highlight

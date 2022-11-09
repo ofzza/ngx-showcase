@@ -5,7 +5,7 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Pipe } from '@angular/core';
-import { MarkdownService, TMarkdownOptions, TWorkerInvocationResponse } from '../../../services';
+import { MarkdownService, TMarkdownOptions, WorkerInvocationResponse } from '../../../services';
 
 // (Re)export showcase component
 export * from './_showcase';
@@ -61,7 +61,7 @@ export class MarkdownAsyncPipe {
     options?: TMarkdownOptions,
     streamPacketSize: number = 0,
     streamPacketDelay: number = 1,
-    streamMonitorCallback?: (res: TWorkerInvocationResponse | Error) => void,
+    streamMonitorCallback?: (res: WorkerInvocationResponse | Error) => void,
   ): Observable<string> {
     return (
       this._markdown

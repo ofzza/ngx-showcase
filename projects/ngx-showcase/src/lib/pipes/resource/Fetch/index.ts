@@ -9,7 +9,7 @@
 // Import dependencies
 import { Observable } from 'rxjs';
 import { Pipe } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { FetchService } from '../../../services';
 
 // (Re)export showcase component
 export * from './_showcase';
@@ -19,7 +19,7 @@ export * from './_showcase';
  */
 @Pipe({ name: 'fetchAsync' })
 export class FetchPipe {
-  constructor(private _http: HttpClient) {}
+  constructor(private _fetch: FetchService) {}
 
   /**
    * Fetches a remote resource from a URL
@@ -27,18 +27,15 @@ export class FetchPipe {
    */
   public transform(url: string): Observable<string> {
     return new Observable<string>(subscriber => {
-      // Fetch resource
-      this._http.get(url, { responseType: 'blob' }).subscribe(res => {
-        res.text().then(
-          data => {
-            subscriber.next(data);
-            subscriber.complete();
-          },
-          err => {
-            subscriber.error(err);
-          },
-        );
-      });
+      (async () => {
+        // Fetch resource
+        try {
+          subscriber.next(await (await this._fetch.fetch(url)).text());
+          subscriber.complete();
+        } catch (err) {
+          subscriber.error(err);
+        }
+      })();
     });
   }
 }

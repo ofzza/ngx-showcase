@@ -5,7 +5,7 @@
 import { Observable, Subscriber, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { registerLanguage, render } from './highlight-js';
-import { TWorkerInvocationRequest, TWorkerInvocationResponse } from '../workers';
+import { WorkerInvocationRequest, WorkerInvocationResponse } from '../workers';
 
 // (Re)export worker
 export * from './worker';
@@ -48,7 +48,7 @@ export class HighlightService {
     number,
     {
       subscriber: Subscriber<string | Error>;
-      monitor?: (res: TWorkerInvocationResponse | Error) => void;
+      monitor?: (res: WorkerInvocationResponse | Error) => void;
     }
   > = {};
 
@@ -101,7 +101,7 @@ export class HighlightService {
     language?: string,
     streamPacketSize: number = 0,
     streamPacketDelay: number = 1,
-    streamMonitorCallback?: (res: TWorkerInvocationResponse | Error) => void,
+    streamMonitorCallback?: (res: WorkerInvocationResponse | Error) => void,
   ): Observable<string | Error> {
     // If no syntax, return not-rendered
     if (!syntax) {
@@ -116,7 +116,7 @@ export class HighlightService {
         this._pendingAsyncQueue[id] = { subscriber, monitor: streamMonitorCallback };
 
         // Post message to web-worker
-        const req: TWorkerInvocationRequest = {
+        const req: WorkerInvocationRequest = {
           id,
           method: 'render',
           args: { syntax, language },
@@ -147,7 +147,7 @@ export class HighlightService {
    */
   private processAsyncResult(msg: MessageEvent<any>) {
     // Parse received data
-    const res = JSON.parse(msg.data) as TWorkerInvocationResponse;
+    const res = JSON.parse(msg.data) as WorkerInvocationResponse;
 
     // Check if message expected
     if (!this._pendingAsyncQueue[res.id]) {

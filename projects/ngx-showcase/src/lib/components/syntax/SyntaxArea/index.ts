@@ -25,11 +25,11 @@ import {
 /**
  * Render perameters
  */
-type TRenderRequest = { lines?: string[]; clear: boolean };
+type RenderRequest = { lines?: string[]; clear: boolean };
 /**
  * Line elements references type
  */
-type TLineRefs = { numEl?: HTMLElement; syntaxEl: HTMLElement; lineEl: HTMLElement };
+type LineRefs = { numEl?: HTMLElement; syntaxEl: HTMLElement; lineEl: HTMLElement };
 
 /**
  * Syntax area component, used to display code/syntax
@@ -98,11 +98,11 @@ export class SyntaxAreaComponent implements AfterViewInit, OnChanges, OnDestroy 
   /**
    * Holds references to all rendered lines' HTML elements
    */
-  public _linesElementsAll: TLineRefs[] = [];
+  public _linesElementsAll: LineRefs[] = [];
   /**
    * Holds references to visible rendered lines' HTML elements
    */
-  private _linesElementsVisible: TLineRefs[] = [];
+  private _linesElementsVisible: LineRefs[] = [];
 
   /**
    * Holds Subject instance used to debounce render requests
@@ -246,7 +246,7 @@ export class SyntaxAreaComponent implements AfterViewInit, OnChanges, OnDestroy 
       } else {
         lineEl.append(syntaxEl);
       }
-      const lineRefs = { numEl, syntaxEl, lineEl } as TLineRefs;
+      const lineRefs = { numEl, syntaxEl, lineEl } as LineRefs;
       // Update line visibility
       this._setLineVisibility(lineRefs, false);
       // Return composed line
@@ -306,7 +306,7 @@ export class SyntaxAreaComponent implements AfterViewInit, OnChanges, OnDestroy 
    * @param lineRefs Line element to update
    * @param visible Visibility
    */
-  private _setLineVisibility(lineRefs: TLineRefs, visible: boolean) {
+  private _setLineVisibility(lineRefs: LineRefs, visible: boolean) {
     // Hide line-numbers on non-showing rows
     if (lineRefs.numEl) {
       lineRefs.numEl.classList[visible ? 'remove' : 'add']('offview');

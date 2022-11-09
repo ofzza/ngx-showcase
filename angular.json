@@ -50,6 +50,7 @@
             "main": "projects/showcase/src/main.ts",
             "polyfills": "projects/showcase/src/polyfills.ts",
             "tsConfig": "projects/showcase/tsconfig.app.json",
+            "baseHref": "/ngx-showcase/",
             "assets": [
               "projects/showcase/src/favicon.ico",
               "projects/showcase/src/assets",
@@ -118,7 +119,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "showcase:build"
+            "browserTarget": "showcase:build",
+            "servePath": "/ngx-showcase/"
           },
           "configurations": {
             "production": {

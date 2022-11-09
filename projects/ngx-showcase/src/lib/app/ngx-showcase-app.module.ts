@@ -22,12 +22,8 @@ export { SyntaxAreaComponentShowcase, SyntaxEditComponentShowcase, ShowcaseCompo
 const components = [AppPageComponent, AppMenuComponent, SyntaxAreaComponentShowcase, SyntaxEditComponentShowcase, ShowcaseComponentShowcase];
 
 // Import providers
-import { APP_BASE_HREF } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 const providers = [HttpClient];
-
-// Detect base[href]
-const baseHref = (typeof document !== 'undefined' && document.head.querySelector('base[href]')?.getAttribute('href')) || '/';
 
 /**
  * Showcasing application module
@@ -36,6 +32,6 @@ const baseHref = (typeof document !== 'undefined' && document.head.querySelector
   declarations: [...components],
   imports: [...modules],
   exports: [...modules, ...components],
-  providers: [{ provide: APP_BASE_HREF, useValue: baseHref }, ...providers],
+  providers: [...providers],
 })
 export class ShowcaseAppModule {}
