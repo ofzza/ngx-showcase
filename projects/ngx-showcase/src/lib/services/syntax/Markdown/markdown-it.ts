@@ -2,7 +2,7 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
-import * as MarkdownIt from 'markdown-it';
+import { default as MarkdownIt } from 'markdown-it';
 import { HighlightService } from '../Highlight';
 
 /**
