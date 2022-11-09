@@ -4,7 +4,6 @@
 // ----------------------------------------------------------------------------
 
 // Import dependencies
-import { Injectable } from '@angular/core';
 import { Route } from '../Route';
 
 /**
@@ -38,7 +37,7 @@ export class ShowcaseBasedRouting {
    */
   public static createRouteFromArtifact(
     artifact: new (...args: any[]) => any,
-    artifactType: ShowcaseArtifactTypes.Component | ShowcaseArtifactTypes.Component | ShowcaseArtifactTypes.Pipe | ShowcaseArtifactTypes.Service,
+    artifactType: ShowcaseArtifactTypes.Component | ShowcaseArtifactTypes.Directive | ShowcaseArtifactTypes.Pipe | ShowcaseArtifactTypes.Service,
     showcaseComponent: undefined | any,
     childRoutes?: Route[],
   ): Route;
@@ -70,23 +69,32 @@ export class ShowcaseBasedRouting {
     let relativePath: string, title: string;
     // Extract component path and title
     if (artifactType === ShowcaseArtifactTypes.Component) {
-      relativePath = artifact.name.replace(/component/gi, '');
-      title = `<${artifact?.ɵcmp?.selectors?.[0]?.[0] || `${relativePath}`} />`;
+      const ngSelector = artifact?.ɵcmp?.selectors?.[0]?.[0];
+      ShowcaseBasedRouting._checkIfResourceMinimized(ngSelector || artifact.name, artifactType);
+      relativePath = ngSelector || artifact.name.replace(/component/gi, '');
+      title = `<${relativePath} />`;
     }
     // Extract directive path and title
     else if (artifactType === ShowcaseArtifactTypes.Directive) {
-      relativePath = artifact.name.replace(/directive/gi, '');
-      title = `<${artifact?.ɵcmp?.selectors?.[0]?.[0] || `${relativePath}`} />`;
+      const ngSelector = artifact?.ɵdir?.selectors?.[0]?.[0];
+      ShowcaseBasedRouting._checkIfResourceMinimized(ngSelector || artifact.name, artifactType);
+      relativePath = ngSelector || artifact.name.replace(/directive/gi, '');
+      title = `[${relativePath}]`;
     }
     // Extract pipe path and title
     else if (artifactType === ShowcaseArtifactTypes.Pipe) {
-      relativePath = artifact.name.toLowerCase().replace(/pipe/gi, '');
-      title = `| ${artifact?.ɵpipe?.name || artifact.name.replace(/pipe/gi, '')}`;
+      const ngSelector = artifact?.ɵpipe?.selectors?.[0]?.[0];
+      ShowcaseBasedRouting._checkIfResourceMinimized(ngSelector || artifact.name, artifactType);
+      relativePath = ngSelector || artifact.name.toLowerCase().replace(/pipe/gi, '');
+      title = `| ${relativePath}`;
     }
     // Extract service path and title
     else if (artifactType === ShowcaseArtifactTypes.Service) {
-      relativePath = artifact.name.toLowerCase().replace(/service/gi, '');
-      title = `${artifact.name.replace(/service/gi, '')}`;
+      const ngServiceName = artifact?.ɵfac?.name?.replace('_Factory', '').replace(/service/gi, '');
+      const ngServicePath = ngServiceName?.toLowerCase();
+      ShowcaseBasedRouting._checkIfResourceMinimized(ngServiceName || artifact.name, artifactType);
+      relativePath = ngServicePath || artifact.name.toLowerCase().replace(/service/gi, '');
+      title = `${ngServiceName || artifact.name.toLowerCase().replace(/service/gi, '')}`;
     }
     // Extract class path and title
     else if (artifactType === ShowcaseArtifactTypes.class && typeof artifact === 'function') {
@@ -132,5 +140,13 @@ export class ShowcaseBasedRouting {
     });
     // Return router routes
     return routerRoutes;
+  }
+
+  private static _checkIfResourceMinimized(artifactName: string, artifactType: ShowcaseArtifactTypes) {
+    if (artifactName && artifactName.toLowerCase() === artifactName && artifactName.length === 1) {
+      console.warn(
+        `Artifact of type ${artifactType} might have had it's name optimized away by the production build. To correctly detect the name, either specify it manually as a string or turn off angular production configuration optimization for this project in angular.json.`,
+      );
+    }
   }
 }
