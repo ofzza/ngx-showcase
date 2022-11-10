@@ -10,9 +10,9 @@
   - At the same time use your code example files as live and executable tests, resources linked from README.md and other markdown documentation files and render them with full syntax highlighting in your showcase application.
 - Demo-ing functionality in an interactive way using the `ngx-showcase` component which will set up an interactive playground for your code.
 
-All documentation is more also available in a more user-friendly form on GitHub pages here: https://ofzza.github.io/ngx-showcase/
-
 <!--intro.end-->
+
+All documentation is also available in a more user-friendly form on GitHub pages here: https://ofzza.github.io/ngx-showcase/
 
 # Getting started
 
@@ -24,7 +24,26 @@ To use `ngx-showcase` in your project, simply install it from NPM by running the
 $ npm install @ofzza/ngx-showcase --save
 ```
 
-... and import the library into your angular project.
+... and import either library module into your angular project.
+
+```ts
+import { ShowcaseModule, ShowcaseAppModule } from '@ofzza/ngx-showcase';
+
+@NgModule({
+  /* ... */
+  imports: [ShowcaseModule, ShowcaseAppModule],
+  /* ... */
+})
+export class MyApplicationModule {}
+```
+
+The `ShowcaseModule` module exports all the unitily functions, while the `ShowcaseAppModule` module additionally exports components and routing definition utilities for qucky setting up a default looking showcasing application for your own project.
+
+## Using showcasing utilities in your own application
+
+Having imported the `ShowcaseModule` you can now import and use all the utilities available in the library.
+
+## Setting up a default looking showcasing application
 
 If your project is a library you might want to:
 
@@ -87,11 +106,7 @@ If your project is a library you might want to:
 
 # Utilities
 
-TODO: ...
-
 ## Services
-
-TODO: ...
 
 ### Runtime compilation
 
@@ -103,13 +118,32 @@ TODO: Runtime compilation
 
 ### Resource services
 
-TODO: ...
-
 #### Fetch resource
 
 <!---fetchservice.start-->
 
-TODO: Fetch resource
+The `FetchService` is used to fetch a URL resource as a Blob, similar to how the native Angular `HttpClient.get` would work, but respecting a `<base href="..." />` configuration for relative paths.
+
+> Also see: `fetchAsync` pipe
+
+---
+
+Usage:
+
+```ts
+import { FetchService } from '@ofzza/ngx-showcase';
+
+class {
+  constructor(private _fetch: FetchService) {
+    // Fetch a resource as a blob (will fetch from url '/README.md',
+    // unless there is a <base href="/some-base-path/" /> set on the page in which case it will fetch from '/some-base-path/README.md')
+    const blob = await this._fetch.fetch('/README.md');
+    // Process blob resource as ...
+    const text = await blob.text();
+    const json = await blob.json();
+  }
+}
+```
 
 <!---fetchservice.end-->
 
@@ -117,7 +151,45 @@ TODO: Fetch resource
 
 <!---stringservice.start-->
 
-TODO: String manipulation
+The `StringService` exposes some frequenty used string manipulation methods.
+
+> Also see: `string` pipe
+
+The service exposes the following string manipulation methods:
+
+##### Trim
+
+```ts
+.trim(str?: string | null): string
+```
+
+Trims the provided text from both sides. Works the same way as Javascript's native String.prototype.trim() function.
+
+##### Extract
+
+```ts
+.extract(str?: string | null, from?: string, to?: string): string
+```
+
+Extracts a section of provided text between the two specified sections. If only `from` is provided, everything after the `from` value will be returned. If only `to` is provided, everythign up to the `to` value will be returned. If both `from` and `to` are provided the text in between will be returned.
+
+---
+
+Usage:
+
+```ts
+import { StringService } from '@ofzza/ngx-showcase';
+
+class {
+  constructor(private _string: StringService) {
+    let text = 'This is some text with ** weird ** formatting!';
+    // Extracts text between two provided text inserts
+    text = this._string.extract(text, '**', '**'); // ' weird '
+    // Trimms string, works same as JS string.trim()
+    text = this._string.trim(text); // 'weird'
+  }
+}
+```
 
 <!---stringservice.end-->
 
@@ -143,8 +215,6 @@ TODO: Markdown rendering
 
 ## Pipes
 
-TODO: ...
-
 ### Resource pipes
 
 TODO: ...
@@ -153,7 +223,25 @@ TODO: ...
 
 <!---fetchpipe.start-->
 
-TODO: Fetch resource
+The `fetchAsync` pipe is used to asynchronously fetch a text URL resource directly into a component template.
+
+> Also see: `FetchService` service
+
+---
+
+Usage:
+
+> Template:
+>
+> ```html
+> <div [innerHTML]="'/README.md' | fetchAsync | async"></div>
+> ```
+>
+> Will render HTML:
+>
+> ```html
+> <div>Content loaded from /README.md file</div>
+> ```
 
 <!---fetchpipe.end-->
 
@@ -161,7 +249,67 @@ TODO: Fetch resource
 
 <!---stringpipe.start-->
 
-TODO: String manipulation
+The `string` pipe is used to perform frequenty used string manipulation on text directly in a component template.
+
+> Also see: `StringService` service
+
+The pipe takes a single argument, an array of operations and operation arguments. The supported operations are the same as exposed methods of `StringService` service.
+
+> Template:
+>
+> ```html
+> <div>{{ 'some text' | string:args }}</div>
+> ```
+>
+> Will render HTML:
+>
+> ```ts
+> typeof args == (keyof StringService | Partial<Record<keyof StringService, any[]>>)[];
+> ```
+
+Defined operations will be executed in order they are specified. Requested operation and operation arguments are passed as a single-key object where the key is equal to the name of the operation and the value is equal to an array of arguments (in addition to the value being piped) to be passed to the coresponding `StringService` method.
+
+> Template:
+>
+> ```html
+> <div>{{ 'This is some text with ** weird ** formatting!' | string:[{ 'extract':['**','**']}] }}</div>
+> ```
+>
+> Will render HTML:
+>
+> ```html
+> <div>weird</div>
+> ```
+
+If the operation being requested requires no additional arguments, instead of a single-key object you can just pass a single string equaling the name of the coresponding `StringService` method.
+
+> Template:
+>
+> ```html
+> <div>{{ ' trim me ' | string:['trim'] }}</div>
+> ```
+>
+> Will render HTML:
+>
+> ```html
+> <div>trim me</div>
+> ```
+
+---
+
+Usage:
+
+> Template:
+>
+> ```html
+> <div>{{ 'This is some text with ** weird ** formatting!' | string:[{ 'extract':['**','**']}, 'trim'] }}</div>
+> ```
+>
+> Will render HTML:
+>
+> ```html
+> <div>weird</div>
+> ```
 
 <!---stringpipe.end-->
 

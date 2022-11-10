@@ -29,7 +29,7 @@ HighlightService.registerWorker(() => {
  */
 @Component({
   selector: 'app-root',
-  template: '<ngx-showcase-app-page title="NGX SHOWCASE" [routes]="_routes"></ngx-showcase-app-page>',
+  template: `<ngx-showcase-app-page [title]="'NGX SHOWCASE'" [routes]="_routes"></ngx-showcase-app-page>`,
   styleUrls: [],
 })
 export class AppComponent {

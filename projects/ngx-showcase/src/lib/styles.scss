@@ -18,4 +18,12 @@
     padding: 4px;
     background: lightgray;
   }
+
+  // Quotes
+  blockquote {
+    padding-left: 10px;
+    border-left: 4px solid gray;
+    font-size: 0.8rem;
+    color: gray;
+  }
 }
